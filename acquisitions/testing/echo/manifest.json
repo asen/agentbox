@@ -1,0 +1,8 @@
+{"schema": "agentbox.handler-manifest.v1",
+ "id": "echo",
+ "version": "1",
+ "entry": "echo/host/worker.py",
+ "files": ["echo/host/worker.py", "lib/agentbox_handler.py"],
+ "operations": ["say", "refuse", "crash"],
+ "metering": "none",
+ "limits": {"args_bytes": 512, "metadata_bytes": 512, "acquisition_seconds": 60}}

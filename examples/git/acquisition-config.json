@@ -1,0 +1,4 @@
+{"schema": "agentbox.acquisition-config.v2",
+ "interpreter": "/usr/bin/python3",
+ "assets": "/opt/agentbox-0.1.0/share/agentbox",
+ "handlers": {"git": {"policy": "/etc/agentbox/git-policy.json"}}}

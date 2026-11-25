@@ -1,0 +1,4 @@
+# The only Rust: the transport server's relay child.
+[workspace]
+members = ["crates/agentbox-relay"]
+resolver = "2"

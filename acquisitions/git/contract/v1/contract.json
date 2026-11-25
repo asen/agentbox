@@ -1,0 +1,145 @@
+{
+  "schema": "agentbox.git.contract.v1",
+  "status": "offline_tested_not_native_qualified",
+  "capability": "host_exact_image_registry",
+  "protocol": "agentbox.git.request",
+  "version": 1,
+  "selection": "host_selected_per_execution_from_its_git_policy_no_negotiation_no_fallback_no_multi_flavor",
+  "policy": {
+    "schema": "agentbox.git.request-policy.v1",
+    "grant": "github-public-read-v1",
+    "max_policy_bytes": 65536,
+    "max_depth": 4,
+    "max_repositories": 256,
+    "error_codes": ["git_policy_unreadable", "git_policy_invalid"],
+    "denials": ["git_denied_no_policy", "git_denied_repository", "git_denied_invalid"]
+  },
+  "repository": {
+    "host": "github.com",
+    "url_prefix": "https://github.com/",
+    "max_url_bytes": 256,
+    "max_owner_bytes": 39,
+    "max_name_bytes": 100,
+    "max_ref_bytes": 256,
+    "max_selector_bytes": 245,
+    "ref_prefixes": ["refs/heads/", "refs/tags/"],
+    "object_format": "sha1",
+    "oid_hex_bytes": 40
+  },
+  "operations": ["clone", "fetch"],
+  "limits": {
+    "max_frame_bytes": 65536,
+    "max_depth": 4,
+    "max_id_bytes": 64,
+    "max_safe_integer": 9007199254740991
+  },
+  "repository_size": "unlimited_by_agentbox_user_decision_host_resource_exhaustion_is_an_operator_concern",
+  "delivery": {
+    "artifact": "one_stock_self_contained_git_bundle_v2_of_every_branch_and_tag_or_the_empty_marker",
+    "bundle_config": ["core.warnAmbiguousRefs=false"],
+    "bundle_command": ["bundle", "create", "--version=2", "--quiet", "-", "--glob=refs/heads/*", "--glob=refs/tags/*"],
+    "bundle_refs": "git_bundle_list_heads_equal_to_the_clones_for_each_ref_inventory_byte_for_byte",
+    "formats": ["bundle", "empty"],
+    "empty_marker": "agentbox.git.empty.v1\n",
+    "metadata": "{format: bundle [, head: refs/heads/X]} | {format: empty}",
+    "guest_import": "fresh_bare_repository_fetch_of_refs_heads_and_refs_tags_from_the_bundle_file_no_network",
+    "error_codes": ["git_bundle_failed"]
+  },
+  "bounds": {
+    "max_active_requests": { "value": 1, "enforcement": "lane_g4" },
+    "max_queued_requests": { "value": 0, "enforcement": "lane_g4" },
+    "max_retries": { "value": 0, "enforcement": "lane_g4" },
+    "max_requests": { "value": 256, "enforcement": "shared_lane", "note": "every handler's together; each starts at most one worker" },
+    "acquired_bytes": { "value": null, "enforcement": "none", "note": "metering none: outside the shared HTTP allowance" },
+    "max_control_messages": { "value": 1088, "enforcement": "post_ingress" },
+    "max_control_bytes": { "value": 38666240, "enforcement": "post_ingress" },
+    "max_tool_diagnostic_bytes": { "value": 65536, "enforcement": "host_worker" },
+    "max_tool_profile_bytes": { "value": 4096, "enforcement": "host_worker" },
+    "max_frame_bytes": { "value": 65536, "enforcement": "codec" }
+  },
+  "timing": {
+    "acquisition_timeout_ms": 600000,
+    "upload_timeout_ms": 60000,
+    "request_timeout_ms": 1800000,
+    "application_timeout_ms": 600000,
+    "handshake_timeout_ms": 10000,
+    "frame_timeout_ms": 10000,
+    "control_write_timeout_ms": 10000,
+    "cleanup_reserve_ms": 250,
+    "enforcement": "lane_g4_host_g2_guest_g3"
+  },
+  "host_types": ["hello", "accepted", "rejected", "deliver", "closed"],
+  "guest_types": ["hello", "submit", "cancel", "result"],
+  "fields": {
+    "host": {
+      "hello": ["protocol", "session"],
+      "accepted": ["protocol", "client", "request"],
+      "rejected": ["protocol", "client", "code"],
+      "deliver": ["protocol", "request", "manifest_sha256", "size", "sha256"],
+      "closed": ["protocol", "request", "outcome"]
+    },
+    "guest": {
+      "hello": ["protocol", "session"],
+      "submit": ["protocol", "client", "operation", "repository"],
+      "cancel": ["protocol", "request"],
+      "result": ["protocol", "request", "status"]
+    }
+  },
+  "optional_fields": {
+    "host": { "closed": ["reason"] },
+    "guest": { "submit": ["selector"] }
+  },
+  "rejected_codes": ["busy", "submission_limit"],
+  "closed_outcomes": ["denied", "cancelled", "expired", "recorded"],
+  "closed_reasons": ["policy", "unavailable", "limit", "unsupported", "inconsistent", "selector", "failed"],
+  "result_statuses": ["applied", "failed"],
+  "error_codes": [
+    "frame_too_large",
+    "truncated_frame",
+    "invalid_framing",
+    "invalid_encoding",
+    "invalid_json",
+    "invalid_number",
+    "duplicate_key",
+    "not_object",
+    "invalid_version",
+    "unsupported_version",
+    "unknown_type",
+    "wrong_direction",
+    "unknown_field",
+    "missing_field",
+    "invalid_field",
+    "limit_exceeded"
+  ],
+  "command_codes": [
+    "git_push_refused",
+    "git_command_unsupported",
+    "git_option_unsupported",
+    "git_arguments_invalid",
+    "git_url_unsupported",
+    "git_selector_invalid",
+    "git_remote_unsupported"
+  ],
+  "default_remote": "origin",
+  "semantics": {
+    "status": "pure_expected_plans_g0_application_g3",
+    "clone_remote": "origin",
+    "default_refspec": "+refs/heads/*:refs/remotes/<remote>/*",
+    "unborn_branch": "refs/heads/main",
+    "peeled_types": ["commit", "tree", "blob"],
+    "local_upstream": ".",
+    "max_local_ref_bytes": 1024,
+    "reserved_branch": "refs/heads/HEAD",
+    "invalid_input": "git_semantics_input_invalid",
+    "codes": [
+      "git_destination_not_empty",
+      "git_selector_not_found",
+      "git_selector_not_checkoutable",
+      "git_ref_unsupported",
+      "git_ref_conflict",
+      "git_remote_unsupported",
+      "git_refspec_unsupported",
+      "git_tag_conflict"
+    ]
+  }
+}

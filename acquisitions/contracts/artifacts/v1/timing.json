@@ -1,0 +1,11 @@
+{
+  "schema": "agentbox.artifact.timing.v1",
+  "profiles": ["agentbox.handlers.v1"],
+  "acquisition_timeout_ms": 600000,
+  "upload_timeout_ms": 60000,
+  "request_timeout_ms": 1800000,
+  "handshake_timeout_ms": 10000,
+  "frame_timeout_ms": 10000,
+  "control_write_timeout_ms": 10000,
+  "cleanup_reserve_ms": 250
+}

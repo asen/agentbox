@@ -1,0 +1,45 @@
+{
+  "schema": "agentbox.worker-layout.v2",
+  "bundle": {
+    "schema": "agentbox.worker-bundle.v3",
+    "platform": "linux-amd64",
+    "protocol": 1,
+    "guest_version": "0.1.0",
+    "manifest": "manifest.json",
+    "top_dirs": ["guest", "acquisitions"],
+    "required": [
+      "guest/__init__.py",
+      "guest/src/__init__.py",
+      "guest/src/main.py",
+      "guest/src/anchor.py",
+      "guest/src/request_main.py"
+    ],
+    "limits": {
+      "max_manifest_bytes": 65536,
+      "max_files": 512,
+      "max_path_bytes": 160,
+      "max_path_depth": 6,
+      "max_name_bytes": 64,
+      "max_file_bytes": 268435456,
+      "max_total_bytes": 536870912
+    }
+  },
+  "entrypoints": ["guest/src/main.py", "guest/src/anchor.py", "guest/src/request_main.py",
+    "acquisitions/pip/jail/pip.py", "acquisitions/npm/jail/npm.py", "acquisitions/git/jail/git.py"],
+  "install_root": "/opt/agentbox/worker",
+  "metadata": {
+    "schema": "agentbox.worker-build.v2",
+    "file": "worker-metadata.json",
+    "installed": "/opt/agentbox/worker-metadata.json"
+  },
+  "sources": {
+    "packages": ["guest", "guest/src", "acquisitions"],
+    "handlers": "acquisitions",
+    "jail": "jail",
+    "skip": ["lib", "testing"],
+    "suffix": ".py",
+    "package": "__init__.py",
+    "cache": "__pycache__",
+    "max_source_bytes": 1048576
+  }
+}

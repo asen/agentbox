@@ -1,0 +1,71 @@
+{
+  "protocol": "agentbox.guest",
+  "version": 1,
+  "limits": {
+    "max_frame_bytes": 65536,
+    "max_depth": 8,
+    "max_id_bytes": 64,
+    "max_guest_version_bytes": 32,
+    "max_output_bytes": 16384,
+    "max_output_text_bytes": 21848,
+    "max_argv_items": 64,
+    "max_arg_bytes": 4096,
+    "max_argv_bytes": 32768,
+    "max_exit_code": 255,
+    "max_safe_integer": 9007199254740991,
+    "max_env_vars": 32,
+    "max_env_name_bytes": 128,
+    "max_env_value_bytes": 8192,
+    "max_env_bytes": 16384,
+    "max_stdin_bytes": 2048,
+    "max_stdin_text_bytes": 2732
+  },
+  "reserved_env": [
+    "PATH",
+    "HOME",
+    "LANG",
+    "TERM",
+    "HTTP_PROXY",
+    "HTTPS_PROXY",
+    "http_proxy",
+    "https_proxy",
+    "AGENTBOX_REQUEST_SESSION",
+    "AGENTBOX_WORK_ROOT",
+    "AGENTBOX_WORK_MOUNT"
+  ],
+  "host_types": [
+    "hello",
+    "exec",
+    "cancel",
+    "inputs_setup",
+    "stdin",
+    "stdin_eof"
+  ],
+  "guest_types": [
+    "hello",
+    "output",
+    "exit",
+    "error",
+    "inputs_ready",
+    "stdin_ready",
+    "stdin_closed"
+  ],
+  "error_codes": [
+    "frame_too_large",
+    "truncated_frame",
+    "invalid_framing",
+    "invalid_encoding",
+    "invalid_json",
+    "invalid_number",
+    "duplicate_key",
+    "not_object",
+    "invalid_version",
+    "unsupported_version",
+    "unknown_type",
+    "wrong_direction",
+    "unknown_field",
+    "missing_field",
+    "invalid_field",
+    "limit_exceeded"
+  ]
+}

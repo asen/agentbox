@@ -1,0 +1,9 @@
+{"schema": "agentbox.handler-manifest.v1",
+ "id": "npm",
+ "version": "1",
+ "entry": "npm/host/worker.py",
+ "files": ["npm/host/worker.py", "lib/agentbox_handler.py", "lib/agentbox_packages.py"],
+ "operations": ["metadata", "tarballs"],
+ "metering": "http",
+ "limits": {"policy_bytes": 4096, "metadata_bytes": 1024, "acquisition_seconds": 600},
+ "jail": {"entry": "acquisitions/npm/jail/npm.py", "shims": ["npm", "npx"]}}

@@ -1,0 +1,120 @@
+name: check
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  rust:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Rust 1.99.0
+        run: |
+          rustup toolchain install 1.99.0 --profile minimal --component rustfmt,clippy
+          rustup default 1.99.0
+      # The workspace: the relay child, the only Rust.
+      - run: cargo fmt --check
+      - run: cargo clippy --locked --all-targets -- -D warnings
+      # It builds for macOS too; a check, not a run.
+      - run: |
+          rustup target add aarch64-apple-darwin
+          cargo check --locked -p agentbox-relay --target aarch64-apple-darwin --all-targets
+      - run: |
+          export TMPDIR="$(mktemp -d "$HOME/ab-ci-XXXXXX")"
+          trap 'rm -rf "$TMPDIR"' EXIT
+          cargo test --locked
+
+  controller:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Rust 1.99.0
+        run: |
+          rustup toolchain install 1.99.0 --profile minimal
+          rustup default 1.99.0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+      # The real agentbox-server (tests/support.py runs a private 0755 copy of
+      # its launcher, package and the built agentbox-relay) and ssh-keygen;
+      # every provider, ssh, scp and agent is a stand-in.
+      - run: cargo build --locked --bin agentbox-relay
+      - run: |
+          export TMPDIR="$(mktemp -d "$HOME/ab-ci-XXXXXX")"
+          trap 'rm -rf "$TMPDIR"' EXIT
+          python3 -I -B -W error::ResourceWarning -m unittest discover -s tests -t .
+
+  guest:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+      - run: |
+          export TMPDIR="$(mktemp -d "$HOME/ab-ci-XXXXXX")"
+          trap 'rm -rf "$TMPDIR"' EXIT
+          python3 -I -B -m unittest discover -s guest/test -t .
+
+  python:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+      # Stdlib only; offline stand-ins for every engine and tool.
+      - run: python3 -I -B -m unittest discover -s providers -p 'test_*.py'
+      - run: python3 -I -B -m unittest discover -s images/worker -p 'test_*.py'
+      - run: python3 -I -B -m unittest discover -s packaging -p 'test_*.py'
+      # The Git worker's suite runs the image's real git (>= 2.53 with
+      # libcurl >= 8.4, the runner's git-core build) and openssl against
+      # loopback fixtures only; an older git fails it, never skips.
+      - run: /usr/bin/git version --build-options && /usr/bin/openssl version
+      - run: python3 -I -B -W error::ResourceWarning -m unittest discover -s acquisitions -p 'test_*.py'
+      - run: python3 -I -B -W error::ResourceWarning -m unittest discover -s inputs -p 'test_*.py'
+      # Python Pi adapter and jail wrapper; Node runs the stand-in Pi agent.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: python3 -I -B -W error::ResourceWarning -m unittest discover -s agents -p 'test_*.py'
+
+  wheel:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Rust 1.99.0
+        run: |
+          rustup toolchain install 1.99.0 --profile minimal
+          rustup default 1.99.0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+      # The documented path: the sdist, a wheel pip builds from that sdist
+      # (real cargo), installed into a venv with umask 0002; the packaging
+      # suite then checks that install (AGENTBOX_TEST_PREFIX) beside its
+      # offline stand-in builds, the installed CLI runs from /, and the
+      # protocol's black-box suite runs against the installed server.
+      - run: |
+          umask 022
+          export TMPDIR="$(mktemp -d "$HOME/ab-ci-XXXXXX")"
+          trap 'rm -rf "$TMPDIR"' EXIT
+          mkdir "$TMPDIR/dist"
+          sdist="$(python3 -I -B -c 'import sys; sys.path.insert(0, "packaging"); import agentbox_build; print(agentbox_build.build_sdist(sys.argv[1]))' "$TMPDIR/dist")"
+          python3 -m pip wheel --no-deps -w "$TMPDIR/dist" "$TMPDIR/dist/$sdist"
+          python3 -m venv --without-pip "$TMPDIR/agentbox"
+          (umask 002; python3 -m pip --python "$TMPDIR/agentbox/bin/python" install --no-deps --no-index "$TMPDIR"/dist/agentbox-*.whl)
+          cd /
+          "$TMPDIR/agentbox/bin/agentbox" --version
+          "$TMPDIR/agentbox/bin/agentbox" doctor
+          cd "$GITHUB_WORKSPACE"
+          AGENTBOX_TEST_PREFIX="$TMPDIR/agentbox" python3 -I -B -m unittest discover -s packaging -p 'test_*.py'
+          AGENTBOX_SERVER_UNDER_TEST="$TMPDIR/agentbox/bin/agentbox-server" \
+            python3 -I -B -W error::ResourceWarning -m unittest discover -s tests/server -t . -p test_server_protocol.py

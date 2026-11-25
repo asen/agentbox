@@ -1,0 +1,31 @@
+#!/usr/bin/python3 -IB
+"""Agentbox's packaged entry (packaging/package.py: PREFIX/bin/agentbox;
+a pip install's scripts directory).
+
+PREFIX is this file's real location's grandparent; the controller runs
+from PREFIX/share/agentbox-assets/controller, the default server is
+PREFIX/bin/agentbox-server. Nothing comes from PATH, the working directory
+or PYTHONPATH (`-I`), and no bytecode is written (`-B`).
+"""
+import os
+import sys
+
+# doctor.py's MIN_PYTHON: the host code needs it before anything imports.
+MIN_PYTHON = (3, 12)
+
+if __name__ == "__main__":
+    if sys.version_info[:2] < MIN_PYTHON:
+        sys.stderr.write(f"agentbox: {sys.executable} is Python {sys.version_info[0]}.{sys.version_info[1]}; "
+                         "agentbox needs 3.12 or later as /usr/bin/python3\n")
+        sys.exit(1)
+    PREFIX = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+    CONTROLLER = os.path.join(PREFIX, "share", "agentbox-assets", "controller")
+    if not os.path.isfile(os.path.join(CONTROLLER, "agentbox_controller", "cli.py")):
+        sys.stderr.write(f"agentbox: no asset tree at {os.path.dirname(CONTROLLER)}: bin/ and "
+                         "share/agentbox-assets/ must share one prefix (packaging/README.md)\n")
+        sys.exit(1)
+    sys.dont_write_bytecode = True
+    sys.path[:0] = [CONTROLLER, os.path.dirname(CONTROLLER)]
+    from agentbox_controller import cli
+
+    sys.exit(cli.main(sys.argv[1:], prefix=PREFIX))

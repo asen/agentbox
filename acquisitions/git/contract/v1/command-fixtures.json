@@ -1,0 +1,2195 @@
+{
+  "description": "Guest-only classification of the argv after git into the supported v1 forms. result is clone (canonical repository and URL, optional selector, destination directory, optional -C directory), fetch (remote, optional -C directory), pull (optional integration flag, optional -C directory), local pass-through or a fixed refusal code. Classification is usability, not a security boundary.",
+  "commands": [
+    {
+      "name": "clone",
+      "argv": [
+        "clone",
+        "https://github.com/octocat/hello-world"
+      ],
+      "result": {
+        "kind": "clone",
+        "repository": "octocat/hello-world",
+        "url": "https://github.com/octocat/hello-world.git",
+        "directory": "hello-world"
+      }
+    },
+    {
+      "name": "clone with suffix",
+      "argv": [
+        "clone",
+        "https://github.com/octocat/hello-world.git"
+      ],
+      "result": {
+        "kind": "clone",
+        "repository": "octocat/hello-world",
+        "url": "https://github.com/octocat/hello-world.git",
+        "directory": "hello-world"
+      }
+    },
+    {
+      "name": "clone keeps typed directory case",
+      "argv": [
+        "clone",
+        "https://github.com/OctoCat/Hello-World.git"
+      ],
+      "result": {
+        "kind": "clone",
+        "repository": "octocat/hello-world",
+        "url": "https://github.com/octocat/hello-world.git",
+        "directory": "Hello-World"
+      }
+    },
+    {
+      "name": "clone into a destination",
+      "argv": [
+        "clone",
+        "https://github.com/octocat/hello-world",
+        "work/hw"
+      ],
+      "result": {
+        "kind": "clone",
+        "repository": "octocat/hello-world",
+        "url": "https://github.com/octocat/hello-world.git",
+        "directory": "work/hw"
+      }
+    },
+    {
+      "name": "clone with --branch",
+      "argv": [
+        "clone",
+        "--branch",
+        "main",
+        "https://github.com/octocat/hello-world"
+      ],
+      "result": {
+        "kind": "clone",
+        "repository": "octocat/hello-world",
+        "url": "https://github.com/octocat/hello-world.git",
+        "directory": "hello-world",
+        "selector": "main"
+      }
+    },
+    {
+      "name": "clone with -b",
+      "argv": [
+        "clone",
+        "-b",
+        "v1.0.0",
+        "https://github.com/octocat/hello-world",
+        "dest"
+      ],
+      "result": {
+        "kind": "clone",
+        "repository": "octocat/hello-world",
+        "url": "https://github.com/octocat/hello-world.git",
+        "directory": "dest",
+        "selector": "v1.0.0"
+      }
+    },
+    {
+      "name": "clone with --branch=",
+      "argv": [
+        "clone",
+        "--branch=release/1.2",
+        "https://github.com/octocat/hello-world"
+      ],
+      "result": {
+        "kind": "clone",
+        "repository": "octocat/hello-world",
+        "url": "https://github.com/octocat/hello-world.git",
+        "directory": "hello-world",
+        "selector": "release/1.2"
+      }
+    },
+    {
+      "name": "clone after --",
+      "argv": [
+        "clone",
+        "--",
+        "https://github.com/octocat/hello-world",
+        "dest"
+      ],
+      "result": {
+        "kind": "clone",
+        "repository": "octocat/hello-world",
+        "url": "https://github.com/octocat/hello-world.git",
+        "directory": "dest"
+      }
+    },
+    {
+      "name": "clone with -C",
+      "argv": [
+        "-C",
+        "projects",
+        "clone",
+        "https://github.com/octocat/hello-world"
+      ],
+      "result": {
+        "kind": "clone",
+        "repository": "octocat/hello-world",
+        "url": "https://github.com/octocat/hello-world.git",
+        "directory": "hello-world",
+        "cwd": "projects"
+      }
+    },
+    {
+      "name": "clone with an option after the URL",
+      "argv": [
+        "clone",
+        "https://github.com/octocat/hello-world",
+        "--depth",
+        "1"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_option_unsupported"
+      }
+    },
+    {
+      "name": "clone --depth=1",
+      "argv": [
+        "clone",
+        "--depth=1",
+        "https://github.com/octocat/hello-world"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_option_unsupported"
+      }
+    },
+    {
+      "name": "clone --shallow-since=2020-01-01",
+      "argv": [
+        "clone",
+        "--shallow-since=2020-01-01",
+        "https://github.com/octocat/hello-world"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_option_unsupported"
+      }
+    },
+    {
+      "name": "clone --filter=blob:none",
+      "argv": [
+        "clone",
+        "--filter=blob:none",
+        "https://github.com/octocat/hello-world"
+      ],
+      "result": {
+        "kind": "clone",
+        "repository": "octocat/hello-world",
+        "url": "https://github.com/octocat/hello-world.git",
+        "directory": "hello-world"
+      }
+    },
+    {
+      "name": "clone --mirror",
+      "argv": [
+        "clone",
+        "--mirror",
+        "https://github.com/octocat/hello-world"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_option_unsupported"
+      }
+    },
+    {
+      "name": "clone --bare",
+      "argv": [
+        "clone",
+        "--bare",
+        "https://github.com/octocat/hello-world"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_option_unsupported"
+      }
+    },
+    {
+      "name": "clone --recursive",
+      "argv": [
+        "clone",
+        "--recursive",
+        "https://github.com/octocat/hello-world"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_option_unsupported"
+      }
+    },
+    {
+      "name": "clone --recurse-submodules",
+      "argv": [
+        "clone",
+        "--recurse-submodules",
+        "https://github.com/octocat/hello-world"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_option_unsupported"
+      }
+    },
+    {
+      "name": "clone --reference=/tmp/x",
+      "argv": [
+        "clone",
+        "--reference=/tmp/x",
+        "https://github.com/octocat/hello-world"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_option_unsupported"
+      }
+    },
+    {
+      "name": "clone --shared",
+      "argv": [
+        "clone",
+        "--shared",
+        "https://github.com/octocat/hello-world"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_option_unsupported"
+      }
+    },
+    {
+      "name": "clone --upload-pack=touch /tmp/x",
+      "argv": [
+        "clone",
+        "--upload-pack=touch /tmp/x",
+        "https://github.com/octocat/hello-world"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_option_unsupported"
+      }
+    },
+    {
+      "name": "clone -u",
+      "argv": [
+        "clone",
+        "-u",
+        "https://github.com/octocat/hello-world"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_option_unsupported"
+      }
+    },
+    {
+      "name": "clone --template=/tmp/t",
+      "argv": [
+        "clone",
+        "--template=/tmp/t",
+        "https://github.com/octocat/hello-world"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_option_unsupported"
+      }
+    },
+    {
+      "name": "clone --separate-git-dir=/tmp/g",
+      "argv": [
+        "clone",
+        "--separate-git-dir=/tmp/g",
+        "https://github.com/octocat/hello-world"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_option_unsupported"
+      }
+    },
+    {
+      "name": "clone --config=core.sshCommand=x",
+      "argv": [
+        "clone",
+        "--config=core.sshCommand=x",
+        "https://github.com/octocat/hello-world"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_option_unsupported"
+      }
+    },
+    {
+      "name": "clone -c",
+      "argv": [
+        "clone",
+        "-c",
+        "https://github.com/octocat/hello-world"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_option_unsupported"
+      }
+    },
+    {
+      "name": "clone --origin=up",
+      "argv": [
+        "clone",
+        "--origin=up",
+        "https://github.com/octocat/hello-world"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_option_unsupported"
+      }
+    },
+    {
+      "name": "clone --single-branch",
+      "argv": [
+        "clone",
+        "--single-branch",
+        "https://github.com/octocat/hello-world"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_option_unsupported"
+      }
+    },
+    {
+      "name": "clone --no-tags",
+      "argv": [
+        "clone",
+        "--no-tags",
+        "https://github.com/octocat/hello-world"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_option_unsupported"
+      }
+    },
+    {
+      "name": "clone -q",
+      "argv": [
+        "clone",
+        "-q",
+        "https://github.com/octocat/hello-world"
+      ],
+      "result": {
+        "kind": "clone",
+        "repository": "octocat/hello-world",
+        "url": "https://github.com/octocat/hello-world.git",
+        "directory": "hello-world"
+      }
+    },
+    {
+      "name": "clone --progress",
+      "argv": [
+        "clone",
+        "--progress",
+        "https://github.com/octocat/hello-world"
+      ],
+      "result": {
+        "kind": "clone",
+        "repository": "octocat/hello-world",
+        "url": "https://github.com/octocat/hello-world.git",
+        "directory": "hello-world"
+      }
+    },
+    {
+      "name": "clone as pip runs it",
+      "argv": [
+        "clone",
+        "--filter=blob:none",
+        "--quiet",
+        "https://github.com/octocat/hello-world.git",
+        "/tmp/pip-req-build-x"
+      ],
+      "result": {
+        "kind": "clone",
+        "repository": "octocat/hello-world",
+        "url": "https://github.com/octocat/hello-world.git",
+        "directory": "/tmp/pip-req-build-x"
+      }
+    },
+    {
+      "name": "clone as pip -v runs it",
+      "argv": [
+        "clone",
+        "--filter=blob:none",
+        "https://github.com/octocat/hello-world.git",
+        "/tmp/pip-req-build-x"
+      ],
+      "result": {
+        "kind": "clone",
+        "repository": "octocat/hello-world",
+        "url": "https://github.com/octocat/hello-world.git",
+        "directory": "/tmp/pip-req-build-x"
+      }
+    },
+    {
+      "name": "clone as pip -vv runs it",
+      "argv": [
+        "clone",
+        "--filter=blob:none",
+        "--verbose",
+        "--progress",
+        "https://github.com/octocat/hello-world.git",
+        "/tmp/pip-req-build-x"
+      ],
+      "result": {
+        "kind": "clone",
+        "repository": "octocat/hello-world",
+        "url": "https://github.com/octocat/hello-world.git",
+        "directory": "/tmp/pip-req-build-x"
+      }
+    },
+    {
+      "name": "clone with a flag after a selector",
+      "argv": [
+        "clone",
+        "-b",
+        "main",
+        "--quiet",
+        "https://github.com/octocat/hello-world"
+      ],
+      "result": {
+        "kind": "clone",
+        "repository": "octocat/hello-world",
+        "url": "https://github.com/octocat/hello-world.git",
+        "selector": "main",
+        "directory": "hello-world"
+      }
+    },
+    {
+      "name": "clone --filter=tree:0",
+      "argv": [
+        "clone",
+        "--filter=tree:0",
+        "https://github.com/octocat/hello-world"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_option_unsupported"
+      }
+    },
+    {
+      "name": "clone --filter with a separate value",
+      "argv": [
+        "clone",
+        "--filter",
+        "blob:none",
+        "https://github.com/octocat/hello-world"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_option_unsupported"
+      }
+    },
+    {
+      "name": "clone --no-filter",
+      "argv": [
+        "clone",
+        "--no-filter",
+        "https://github.com/octocat/hello-world"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_option_unsupported"
+      }
+    },
+    {
+      "name": "clone -v",
+      "argv": [
+        "clone",
+        "-v",
+        "https://github.com/octocat/hello-world"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_option_unsupported"
+      }
+    },
+    {
+      "name": "clone with a repeated flag",
+      "argv": [
+        "clone",
+        "--quiet",
+        "-q",
+        "https://github.com/octocat/hello-world"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_option_unsupported"
+      }
+    },
+    {
+      "name": "clone with a repeated filter",
+      "argv": [
+        "clone",
+        "--filter=blob:none",
+        "--filter=blob:none",
+        "https://github.com/octocat/hello-world"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_option_unsupported"
+      }
+    },
+    {
+      "name": "clone with a flag after the URL",
+      "argv": [
+        "clone",
+        "https://github.com/octocat/hello-world",
+        "--quiet"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_option_unsupported"
+      }
+    },
+    {
+      "name": "clone --local",
+      "argv": [
+        "clone",
+        "--local",
+        "https://github.com/octocat/hello-world"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_option_unsupported"
+      }
+    },
+    {
+      "name": "clone --no-checkout",
+      "argv": [
+        "clone",
+        "--no-checkout",
+        "https://github.com/octocat/hello-world"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_option_unsupported"
+      }
+    },
+    {
+      "name": "clone --sparse",
+      "argv": [
+        "clone",
+        "--sparse",
+        "https://github.com/octocat/hello-world"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_option_unsupported"
+      }
+    },
+    {
+      "name": "clone --bundle-uri=x",
+      "argv": [
+        "clone",
+        "--bundle-uri=x",
+        "https://github.com/octocat/hello-world"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_option_unsupported"
+      }
+    },
+    {
+      "name": "clone --server-option=x",
+      "argv": [
+        "clone",
+        "--server-option=x",
+        "https://github.com/octocat/hello-world"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_option_unsupported"
+      }
+    },
+    {
+      "name": "clone with two selectors",
+      "argv": [
+        "clone",
+        "-b",
+        "a",
+        "-b",
+        "b",
+        "https://github.com/octocat/hello-world"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_option_unsupported"
+      }
+    },
+    {
+      "name": "clone with a missing selector value",
+      "argv": [
+        "clone",
+        "--branch"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_arguments_invalid"
+      }
+    },
+    {
+      "name": "clone without URL",
+      "argv": [
+        "clone"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_arguments_invalid"
+      }
+    },
+    {
+      "name": "clone with three positionals",
+      "argv": [
+        "clone",
+        "https://github.com/octocat/hello-world",
+        "a",
+        "b"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_arguments_invalid"
+      }
+    },
+    {
+      "name": "clone of an ssh URL",
+      "argv": [
+        "clone",
+        "git@github.com:octocat/hello-world.git"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_url_unsupported"
+      }
+    },
+    {
+      "name": "clone of a local path",
+      "argv": [
+        "clone",
+        "/tmp/repo"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_url_unsupported"
+      }
+    },
+    {
+      "name": "clone of a file URL",
+      "argv": [
+        "clone",
+        "file:///tmp/repo"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_url_unsupported"
+      }
+    },
+    {
+      "name": "clone of an ext transport",
+      "argv": [
+        "clone",
+        "ext::sh -c touch% /tmp/x"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_url_unsupported"
+      }
+    },
+    {
+      "name": "clone of another host",
+      "argv": [
+        "clone",
+        "https://gitlab.com/o/r"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_url_unsupported"
+      }
+    },
+    {
+      "name": "clone of a URL with credentials",
+      "argv": [
+        "clone",
+        "https://x:token@github.com/o/r"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_url_unsupported"
+      }
+    },
+    {
+      "name": "clone with a hostile selector",
+      "argv": [
+        "clone",
+        "--branch",
+        "--upload-pack=x",
+        "https://github.com/octocat/hello-world"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_selector_invalid"
+      }
+    },
+    {
+      "name": "clone with an object range selector",
+      "argv": [
+        "clone",
+        "-b",
+        "main~1",
+        "https://github.com/octocat/hello-world"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_selector_invalid"
+      }
+    },
+    {
+      "name": "clone with a literal shell-looking selector",
+      "argv": [
+        "clone",
+        "-b",
+        "$(id)",
+        "https://github.com/octocat/hello-world"
+      ],
+      "result": {
+        "kind": "clone",
+        "repository": "octocat/hello-world",
+        "url": "https://github.com/octocat/hello-world.git",
+        "directory": "hello-world",
+        "selector": "$(id)"
+      }
+    },
+    {
+      "name": "clone into an option-looking destination",
+      "argv": [
+        "clone",
+        "--",
+        "https://github.com/octocat/hello-world",
+        "-dest"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_arguments_invalid"
+      }
+    },
+    {
+      "name": "clone into an empty destination",
+      "argv": [
+        "clone",
+        "https://github.com/octocat/hello-world",
+        ""
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_arguments_invalid"
+      }
+    },
+    {
+      "name": "clone with an empty -C",
+      "argv": [
+        "-C",
+        "",
+        "clone",
+        "https://github.com/octocat/hello-world"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_arguments_invalid"
+      }
+    },
+    {
+      "name": "clone with two -C",
+      "argv": [
+        "-C",
+        "a",
+        "-C",
+        "b",
+        "clone",
+        "https://github.com/octocat/hello-world"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_option_unsupported"
+      }
+    },
+    {
+      "name": "clone with -c override",
+      "argv": [
+        "-c",
+        "http.proxy=x",
+        "clone",
+        "https://github.com/octocat/hello-world"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_option_unsupported"
+      }
+    },
+    {
+      "name": "clone with --git-dir",
+      "argv": [
+        "--git-dir",
+        "/tmp/g",
+        "clone",
+        "https://github.com/octocat/hello-world"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_option_unsupported"
+      }
+    },
+    {
+      "name": "clone with --exec-path",
+      "argv": [
+        "--exec-path=/tmp",
+        "clone",
+        "https://github.com/octocat/hello-world"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_option_unsupported"
+      }
+    },
+    {
+      "name": "fetch",
+      "argv": [
+        "fetch"
+      ],
+      "result": {
+        "kind": "fetch",
+        "remote": "origin"
+      }
+    },
+    {
+      "name": "fetch a named remote",
+      "argv": [
+        "fetch",
+        "upstream"
+      ],
+      "result": {
+        "kind": "fetch",
+        "remote": "upstream"
+      }
+    },
+    {
+      "name": "fetch with -C",
+      "argv": [
+        "-C",
+        "repo",
+        "fetch",
+        "origin"
+      ],
+      "result": {
+        "kind": "fetch",
+        "remote": "origin",
+        "cwd": "repo"
+      }
+    },
+    {
+      "name": "fetch after --",
+      "argv": [
+        "fetch",
+        "--",
+        "origin"
+      ],
+      "result": {
+        "kind": "fetch",
+        "remote": "origin"
+      }
+    },
+    {
+      "name": "fetch --all",
+      "argv": [
+        "fetch",
+        "--all"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_option_unsupported"
+      }
+    },
+    {
+      "name": "fetch --multiple",
+      "argv": [
+        "fetch",
+        "--multiple"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_option_unsupported"
+      }
+    },
+    {
+      "name": "fetch --prune",
+      "argv": [
+        "fetch",
+        "--prune"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_option_unsupported"
+      }
+    },
+    {
+      "name": "fetch --tags",
+      "argv": [
+        "fetch",
+        "--tags"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_option_unsupported"
+      }
+    },
+    {
+      "name": "fetch --depth=1",
+      "argv": [
+        "fetch",
+        "--depth=1"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_option_unsupported"
+      }
+    },
+    {
+      "name": "fetch --unshallow",
+      "argv": [
+        "fetch",
+        "--unshallow"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_option_unsupported"
+      }
+    },
+    {
+      "name": "fetch --deepen=1",
+      "argv": [
+        "fetch",
+        "--deepen=1"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_option_unsupported"
+      }
+    },
+    {
+      "name": "fetch --filter=blob:none",
+      "argv": [
+        "fetch",
+        "--filter=blob:none"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_option_unsupported"
+      }
+    },
+    {
+      "name": "fetch --upload-pack=x",
+      "argv": [
+        "fetch",
+        "--upload-pack=x"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_option_unsupported"
+      }
+    },
+    {
+      "name": "fetch --recurse-submodules",
+      "argv": [
+        "fetch",
+        "--recurse-submodules"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_option_unsupported"
+      }
+    },
+    {
+      "name": "fetch --refmap=",
+      "argv": [
+        "fetch",
+        "--refmap="
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_option_unsupported"
+      }
+    },
+    {
+      "name": "fetch -q",
+      "argv": [
+        "fetch",
+        "-q"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_option_unsupported"
+      }
+    },
+    {
+      "name": "fetch --force",
+      "argv": [
+        "fetch",
+        "--force"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_option_unsupported"
+      }
+    },
+    {
+      "name": "fetch --dry-run",
+      "argv": [
+        "fetch",
+        "--dry-run"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_option_unsupported"
+      }
+    },
+    {
+      "name": "fetch --update-head-ok",
+      "argv": [
+        "fetch",
+        "--update-head-ok"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_option_unsupported"
+      }
+    },
+    {
+      "name": "fetch --negotiation-tip=x",
+      "argv": [
+        "fetch",
+        "--negotiation-tip=x"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_option_unsupported"
+      }
+    },
+    {
+      "name": "fetch a refspec",
+      "argv": [
+        "fetch",
+        "origin",
+        "main"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_arguments_invalid"
+      }
+    },
+    {
+      "name": "fetch a forced refspec",
+      "argv": [
+        "fetch",
+        "origin",
+        "+refs/*:refs/*"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_arguments_invalid"
+      }
+    },
+    {
+      "name": "fetch a URL",
+      "argv": [
+        "fetch",
+        "https://github.com/o/r"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_remote_unsupported"
+      }
+    },
+    {
+      "name": "fetch a path",
+      "argv": [
+        "fetch",
+        "../other"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_remote_unsupported"
+      }
+    },
+    {
+      "name": "fetch an ext transport",
+      "argv": [
+        "fetch",
+        "ext::sh"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_remote_unsupported"
+      }
+    },
+    {
+      "name": "fetch with -c override",
+      "argv": [
+        "-c",
+        "remote.origin.url=x",
+        "fetch"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_option_unsupported"
+      }
+    },
+    {
+      "name": "push",
+      "argv": [
+        "push"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_push_refused"
+      }
+    },
+    {
+      "name": "push with arguments",
+      "argv": [
+        "push",
+        "--force",
+        "origin",
+        "main"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_push_refused"
+      }
+    },
+    {
+      "name": "push with -C",
+      "argv": [
+        "-C",
+        "repo",
+        "push"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_push_refused"
+      }
+    },
+    {
+      "name": "push with overrides",
+      "argv": [
+        "-c",
+        "x=y",
+        "--no-pager",
+        "push"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_push_refused"
+      }
+    },
+    {
+      "name": "lfs push",
+      "argv": [
+        "lfs",
+        "push",
+        "origin"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_push_refused"
+      }
+    },
+    {
+      "name": "pull",
+      "argv": [
+        "pull"
+      ],
+      "result": {
+        "kind": "pull"
+      }
+    },
+    {
+      "name": "pull --ff-only",
+      "argv": [
+        "pull",
+        "--ff-only"
+      ],
+      "result": {
+        "kind": "pull",
+        "flag": "--ff-only"
+      }
+    },
+    {
+      "name": "pull --rebase",
+      "argv": [
+        "pull",
+        "--rebase"
+      ],
+      "result": {
+        "kind": "pull",
+        "flag": "--rebase"
+      }
+    },
+    {
+      "name": "pull --no-rebase",
+      "argv": [
+        "pull",
+        "--no-rebase"
+      ],
+      "result": {
+        "kind": "pull",
+        "flag": "--no-rebase"
+      }
+    },
+    {
+      "name": "pull with -C",
+      "argv": [
+        "-C",
+        "work",
+        "pull",
+        "--rebase"
+      ],
+      "result": {
+        "kind": "pull",
+        "flag": "--rebase",
+        "cwd": "work"
+      }
+    },
+    {
+      "name": "pull a named remote",
+      "argv": [
+        "pull",
+        "origin"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_arguments_invalid"
+      }
+    },
+    {
+      "name": "pull a remote and refspec",
+      "argv": [
+        "pull",
+        "origin",
+        "main"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_arguments_invalid"
+      }
+    },
+    {
+      "name": "pull a URL",
+      "argv": [
+        "pull",
+        "https://github.com/octocat/hello-world"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_arguments_invalid"
+      }
+    },
+    {
+      "name": "pull two flags",
+      "argv": [
+        "pull",
+        "--rebase",
+        "--ff-only"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_option_unsupported"
+      }
+    },
+    {
+      "name": "pull a flag twice",
+      "argv": [
+        "pull",
+        "--rebase",
+        "--rebase"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_option_unsupported"
+      }
+    },
+    {
+      "name": "pull -r",
+      "argv": [
+        "pull",
+        "-r"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_option_unsupported"
+      }
+    },
+    {
+      "name": "pull --rebase=merges",
+      "argv": [
+        "pull",
+        "--rebase=merges"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_option_unsupported"
+      }
+    },
+    {
+      "name": "pull --recurse-submodules",
+      "argv": [
+        "pull",
+        "--recurse-submodules"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_option_unsupported"
+      }
+    },
+    {
+      "name": "pull --",
+      "argv": [
+        "pull",
+        "--"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_option_unsupported"
+      }
+    },
+    {
+      "name": "pull after -c",
+      "argv": [
+        "-c",
+        "pull.rebase=true",
+        "pull"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_option_unsupported"
+      }
+    },
+    {
+      "name": "pull with two -C",
+      "argv": [
+        "-C",
+        "a",
+        "-C",
+        "b",
+        "pull"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_option_unsupported"
+      }
+    },
+    {
+      "name": "ls-remote",
+      "argv": [
+        "ls-remote",
+        "https://github.com/octocat/hello-world"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_command_unsupported"
+      }
+    },
+    {
+      "name": "remote update",
+      "argv": [
+        "remote",
+        "update"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_command_unsupported"
+      }
+    },
+    {
+      "name": "remote prune",
+      "argv": [
+        "remote",
+        "prune",
+        "origin"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_command_unsupported"
+      }
+    },
+    {
+      "name": "remote show",
+      "argv": [
+        "remote",
+        "show",
+        "origin"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_command_unsupported"
+      }
+    },
+    {
+      "name": "remote show -n is local",
+      "argv": [
+        "remote",
+        "show",
+        "-n",
+        "origin"
+      ],
+      "result": {
+        "kind": "local"
+      }
+    },
+    {
+      "name": "remote add is local",
+      "argv": [
+        "remote",
+        "add",
+        "up",
+        "https://github.com/octocat/hello-world"
+      ],
+      "result": {
+        "kind": "local"
+      }
+    },
+    {
+      "name": "remote -v is local",
+      "argv": [
+        "remote",
+        "-v"
+      ],
+      "result": {
+        "kind": "local"
+      }
+    },
+    {
+      "name": "submodule update",
+      "argv": [
+        "submodule",
+        "update",
+        "--init"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_command_unsupported"
+      }
+    },
+    {
+      "name": "submodule add",
+      "argv": [
+        "submodule",
+        "add",
+        "https://github.com/octocat/hello-world"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_command_unsupported"
+      }
+    },
+    {
+      "name": "submodule status is local",
+      "argv": [
+        "submodule",
+        "status"
+      ],
+      "result": {
+        "kind": "local"
+      }
+    },
+    {
+      "name": "lfs fetch",
+      "argv": [
+        "lfs",
+        "fetch"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_command_unsupported"
+      }
+    },
+    {
+      "name": "lfs pull",
+      "argv": [
+        "lfs",
+        "pull"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_command_unsupported"
+      }
+    },
+    {
+      "name": "status is local",
+      "argv": [
+        "status"
+      ],
+      "result": {
+        "kind": "local"
+      }
+    },
+    {
+      "name": "commit is local",
+      "argv": [
+        "-C",
+        "repo",
+        "commit",
+        "-m",
+        "x"
+      ],
+      "result": {
+        "kind": "local"
+      }
+    },
+    {
+      "name": "log with overrides is local",
+      "argv": [
+        "-c",
+        "color.ui=never",
+        "log"
+      ],
+      "result": {
+        "kind": "local"
+      }
+    },
+    {
+      "name": "version is local",
+      "argv": [
+        "--version"
+      ],
+      "result": {
+        "kind": "local"
+      }
+    },
+    {
+      "name": "no arguments is local",
+      "argv": [],
+      "result": {
+        "kind": "local"
+      }
+    },
+    {
+      "name": "alias is local",
+      "argv": [
+        "co",
+        "main"
+      ],
+      "result": {
+        "kind": "local"
+      }
+    },
+    {
+      "name": "valued global --attr-source before push",
+      "argv": [
+        "--attr-source",
+        "HEAD",
+        "push"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_push_refused"
+      }
+    },
+    {
+      "name": "valued global --attr-source before clone",
+      "argv": [
+        "--attr-source",
+        "HEAD",
+        "clone",
+        "https://github.com/octocat/hello-world"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_option_unsupported"
+      }
+    },
+    {
+      "name": "valued global --attr-source before fetch",
+      "argv": [
+        "--attr-source",
+        "HEAD",
+        "fetch"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_option_unsupported"
+      }
+    },
+    {
+      "name": "attached --attr-source before a local command",
+      "argv": [
+        "--attr-source=HEAD",
+        "status"
+      ],
+      "result": {
+        "kind": "local"
+      }
+    },
+    {
+      "name": "attached --git-dir before push",
+      "argv": [
+        "--git-dir=/tmp/g",
+        "push"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_push_refused"
+      }
+    },
+    {
+      "name": "valued --namespace before fetch",
+      "argv": [
+        "--namespace",
+        "ns",
+        "fetch"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_option_unsupported"
+      }
+    },
+    {
+      "name": "valued --config-env before push",
+      "argv": [
+        "--config-env",
+        "core.sshCommand=X",
+        "push"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_push_refused"
+      }
+    },
+    {
+      "name": "valued --work-tree before a local command",
+      "argv": [
+        "--work-tree",
+        "push",
+        "status"
+      ],
+      "result": {
+        "kind": "local"
+      }
+    },
+    {
+      "name": "a valued global's value is not the command",
+      "argv": [
+        "-C",
+        "push",
+        "status"
+      ],
+      "result": {
+        "kind": "local"
+      }
+    },
+    {
+      "name": "flag globals before push",
+      "argv": [
+        "--no-pager",
+        "--no-optional-locks",
+        "--bare",
+        "push"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_push_refused"
+      }
+    },
+    {
+      "name": "list-cmds is attached only",
+      "argv": [
+        "--list-cmds=main",
+        "push"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_push_refused"
+      }
+    },
+    {
+      "name": "missing -c value",
+      "argv": [
+        "-c"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_arguments_invalid"
+      }
+    },
+    {
+      "name": "missing --attr-source value",
+      "argv": [
+        "status",
+        "--attr-source"
+      ],
+      "result": {
+        "kind": "local"
+      }
+    },
+    {
+      "name": "missing global value before nothing",
+      "argv": [
+        "--attr-source"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_arguments_invalid"
+      }
+    },
+    {
+      "name": "unknown global before push",
+      "argv": [
+        "--frobnicate",
+        "push"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_option_unsupported"
+      }
+    },
+    {
+      "name": "unknown global before a local command",
+      "argv": [
+        "--frobnicate",
+        "status"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_option_unsupported"
+      }
+    },
+    {
+      "name": "attached -C is not Git's form",
+      "argv": [
+        "-Crepo",
+        "push"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_option_unsupported"
+      }
+    },
+    {
+      "name": "global terminator is not Git's form",
+      "argv": [
+        "--",
+        "push"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_option_unsupported"
+      }
+    },
+    {
+      "name": "bare --exec-path prints and exits",
+      "argv": [
+        "--exec-path",
+        "push"
+      ],
+      "result": {
+        "kind": "local"
+      }
+    },
+    {
+      "name": "--help runs help",
+      "argv": [
+        "--help",
+        "push"
+      ],
+      "result": {
+        "kind": "local"
+      }
+    },
+    {
+      "name": "-v runs version",
+      "argv": [
+        "-v",
+        "push"
+      ],
+      "result": {
+        "kind": "local"
+      }
+    },
+    {
+      "name": "send-pack writes upstream",
+      "argv": [
+        "send-pack",
+        "https://github.com/octocat/hello-world",
+        "main"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_push_refused"
+      }
+    },
+    {
+      "name": "http-push writes upstream",
+      "argv": [
+        "http-push",
+        "https://github.com/octocat/hello-world"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_push_refused"
+      }
+    },
+    {
+      "name": "fetch-pack",
+      "argv": [
+        "fetch-pack",
+        "https://github.com/octocat/hello-world"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_command_unsupported"
+      }
+    },
+    {
+      "name": "request-pull",
+      "argv": [
+        "request-pull",
+        "v1",
+        "https://github.com/octocat/hello-world"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_command_unsupported"
+      }
+    },
+    {
+      "name": "archive --remote",
+      "argv": [
+        "archive",
+        "--remote",
+        "https://github.com/octocat/hello-world",
+        "HEAD"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_command_unsupported"
+      }
+    },
+    {
+      "name": "archive --remote=",
+      "argv": [
+        "archive",
+        "--remote=x",
+        "HEAD"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_command_unsupported"
+      }
+    },
+    {
+      "name": "archive is local",
+      "argv": [
+        "archive",
+        "HEAD"
+      ],
+      "result": {
+        "kind": "local"
+      }
+    },
+    {
+      "name": "archive path after -- is local",
+      "argv": [
+        "archive",
+        "HEAD",
+        "--",
+        "--remote=x"
+      ],
+      "result": {
+        "kind": "local"
+      }
+    },
+    {
+      "name": "remote show -n after -- is positional",
+      "argv": [
+        "remote",
+        "show",
+        "--",
+        "origin",
+        "-n"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_command_unsupported"
+      }
+    },
+    {
+      "name": "remote show -n before -- is local",
+      "argv": [
+        "remote",
+        "show",
+        "-n",
+        "--",
+        "origin"
+      ],
+      "result": {
+        "kind": "local"
+      }
+    },
+    {
+      "name": "remote show with a permuted -n is local",
+      "argv": [
+        "remote",
+        "show",
+        "origin",
+        "-n"
+      ],
+      "result": {
+        "kind": "local"
+      }
+    },
+    {
+      "name": "remote -v show",
+      "argv": [
+        "remote",
+        "-v",
+        "show",
+        "origin"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_command_unsupported"
+      }
+    },
+    {
+      "name": "remote -- update",
+      "argv": [
+        "remote",
+        "--",
+        "update"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_command_unsupported"
+      }
+    },
+    {
+      "name": "remote with an unknown option",
+      "argv": [
+        "remote",
+        "--frobnicate",
+        "add",
+        "up",
+        "https://github.com/octocat/hello-world"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_option_unsupported"
+      }
+    },
+    {
+      "name": "remote show without a name lists locally",
+      "argv": [
+        "remote",
+        "show",
+        "-n"
+      ],
+      "result": {
+        "kind": "local"
+      }
+    },
+    {
+      "name": "remote add -f fetches",
+      "argv": [
+        "remote",
+        "add",
+        "-f",
+        "up",
+        "https://github.com/octocat/hello-world"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_command_unsupported"
+      }
+    },
+    {
+      "name": "remote add --fetch fetches",
+      "argv": [
+        "remote",
+        "add",
+        "up",
+        "https://github.com/octocat/hello-world",
+        "--fetch"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_command_unsupported"
+      }
+    },
+    {
+      "name": "remote add after -- is local",
+      "argv": [
+        "remote",
+        "add",
+        "--",
+        "up",
+        "-f"
+      ],
+      "result": {
+        "kind": "local"
+      }
+    },
+    {
+      "name": "remote set-head -a queries",
+      "argv": [
+        "remote",
+        "set-head",
+        "origin",
+        "-a"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_command_unsupported"
+      }
+    },
+    {
+      "name": "remote set-head --auto queries",
+      "argv": [
+        "remote",
+        "set-head",
+        "origin",
+        "--auto"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_command_unsupported"
+      }
+    },
+    {
+      "name": "remote set-head to a name is local",
+      "argv": [
+        "remote",
+        "set-head",
+        "origin",
+        "main"
+      ],
+      "result": {
+        "kind": "local"
+      }
+    },
+    {
+      "name": "remote set-url is local",
+      "argv": [
+        "remote",
+        "set-url",
+        "origin",
+        "https://github.com/octocat/hello-world"
+      ],
+      "result": {
+        "kind": "local"
+      }
+    },
+    {
+      "name": "submodule --quiet update",
+      "argv": [
+        "submodule",
+        "--quiet",
+        "update"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_command_unsupported"
+      }
+    },
+    {
+      "name": "submodule -- add",
+      "argv": [
+        "submodule",
+        "--",
+        "add",
+        "https://github.com/octocat/hello-world"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_command_unsupported"
+      }
+    },
+    {
+      "name": "submodule with an unknown option",
+      "argv": [
+        "submodule",
+        "--frobnicate",
+        "status"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_option_unsupported"
+      }
+    },
+    {
+      "name": "submodule alone is local status",
+      "argv": [
+        "submodule"
+      ],
+      "result": {
+        "kind": "local"
+      }
+    },
+    {
+      "name": "submodule foreach is local, not intercepted",
+      "argv": [
+        "submodule",
+        "foreach",
+        "git",
+        "fetch"
+      ],
+      "result": {
+        "kind": "local"
+      }
+    },
+    {
+      "name": "lfs clone",
+      "argv": [
+        "lfs",
+        "clone",
+        "https://github.com/octocat/hello-world"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_command_unsupported"
+      }
+    },
+    {
+      "name": "lfs version is local",
+      "argv": [
+        "lfs",
+        "--version"
+      ],
+      "result": {
+        "kind": "local"
+      }
+    },
+    {
+      "name": "lfs with an unknown option",
+      "argv": [
+        "lfs",
+        "--frobnicate",
+        "push"
+      ],
+      "result": {
+        "kind": "refused",
+        "code": "git_option_unsupported"
+      }
+    },
+    {
+      "name": "alias definition is local, not intercepted",
+      "argv": [
+        "-c",
+        "alias.p=push",
+        "p"
+      ],
+      "result": {
+        "kind": "local"
+      }
+    }
+  ]
+}

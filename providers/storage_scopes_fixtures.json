@@ -1,0 +1,670 @@
+{
+ "schema": "agentbox.storage-scopes-fixtures.v1",
+ "note": "run-limits.json documents and whether both the Rust core (run.rs parse_store_limits) and the Python providers (common.parse_limits) accept them: `limits` as a JSON value, `raw` (exact ASCII bytes) or `raw_hex` (exact bytes) as the file holds them",
+ "cases": [
+  {
+   "name": "the operator example",
+   "valid": true,
+   "limits": {
+    "max_reserved_bytes": 137438953472,
+    "storage_scopes": [
+     {
+      "path": "/srv/agentbox-state",
+      "measure": "tree",
+      "uncapped": [
+       "resources",
+       "work"
+      ]
+     },
+     {
+      "path": "/run/agentbox-stores",
+      "measure": "filesystem"
+     }
+    ]
+   }
+  },
+  {
+   "name": "threshold only",
+   "valid": true,
+   "limits": {
+    "max_reserved_bytes": 1
+   }
+  },
+  {
+   "name": "nested strict trees",
+   "valid": true,
+   "limits": {
+    "max_reserved_bytes": 1,
+    "storage_scopes": [
+     {
+      "path": "/srv",
+      "measure": "tree"
+     },
+     {
+      "path": "/srv/state",
+      "measure": "tree"
+     }
+    ]
+   }
+  },
+  {
+   "name": "an outer prefix elsewhere",
+   "valid": true,
+   "limits": {
+    "max_reserved_bytes": 1,
+    "storage_scopes": [
+     {
+      "path": "/srv",
+      "measure": "tree",
+      "uncapped": [
+       "other"
+      ]
+     },
+     {
+      "path": "/srv/state",
+      "measure": "tree"
+     }
+    ]
+   }
+  },
+  {
+   "name": "a filesystem over an uncapped tree",
+   "valid": true,
+   "limits": {
+    "max_reserved_bytes": 1,
+    "storage_scopes": [
+     {
+      "path": "/srv",
+      "measure": "filesystem"
+     },
+     {
+      "path": "/srv/state",
+      "measure": "tree",
+      "uncapped": [
+       "x"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "empty uncapped on a filesystem",
+   "valid": true,
+   "limits": {
+    "max_reserved_bytes": 1,
+    "storage_scopes": [
+     {
+      "path": "/srv",
+      "measure": "filesystem",
+      "uncapped": []
+     }
+    ]
+   }
+  },
+  {
+   "name": "sixteen scopes",
+   "valid": true,
+   "limits": {
+    "max_reserved_bytes": 1,
+    "storage_scopes": [
+     {
+      "path": "/srv/s0",
+      "measure": "tree"
+     },
+     {
+      "path": "/srv/s1",
+      "measure": "tree"
+     },
+     {
+      "path": "/srv/s2",
+      "measure": "tree"
+     },
+     {
+      "path": "/srv/s3",
+      "measure": "tree"
+     },
+     {
+      "path": "/srv/s4",
+      "measure": "tree"
+     },
+     {
+      "path": "/srv/s5",
+      "measure": "tree"
+     },
+     {
+      "path": "/srv/s6",
+      "measure": "tree"
+     },
+     {
+      "path": "/srv/s7",
+      "measure": "tree"
+     },
+     {
+      "path": "/srv/s8",
+      "measure": "tree"
+     },
+     {
+      "path": "/srv/s9",
+      "measure": "tree"
+     },
+     {
+      "path": "/srv/s10",
+      "measure": "tree"
+     },
+     {
+      "path": "/srv/s11",
+      "measure": "tree"
+     },
+     {
+      "path": "/srv/s12",
+      "measure": "tree"
+     },
+     {
+      "path": "/srv/s13",
+      "measure": "tree"
+     },
+     {
+      "path": "/srv/s14",
+      "measure": "tree"
+     },
+     {
+      "path": "/srv/s15",
+      "measure": "tree"
+     }
+    ]
+   }
+  },
+  {
+   "name": "seventeen scopes",
+   "valid": false,
+   "limits": {
+    "max_reserved_bytes": 1,
+    "storage_scopes": [
+     {
+      "path": "/srv/s0",
+      "measure": "tree"
+     },
+     {
+      "path": "/srv/s1",
+      "measure": "tree"
+     },
+     {
+      "path": "/srv/s2",
+      "measure": "tree"
+     },
+     {
+      "path": "/srv/s3",
+      "measure": "tree"
+     },
+     {
+      "path": "/srv/s4",
+      "measure": "tree"
+     },
+     {
+      "path": "/srv/s5",
+      "measure": "tree"
+     },
+     {
+      "path": "/srv/s6",
+      "measure": "tree"
+     },
+     {
+      "path": "/srv/s7",
+      "measure": "tree"
+     },
+     {
+      "path": "/srv/s8",
+      "measure": "tree"
+     },
+     {
+      "path": "/srv/s9",
+      "measure": "tree"
+     },
+     {
+      "path": "/srv/s10",
+      "measure": "tree"
+     },
+     {
+      "path": "/srv/s11",
+      "measure": "tree"
+     },
+     {
+      "path": "/srv/s12",
+      "measure": "tree"
+     },
+     {
+      "path": "/srv/s13",
+      "measure": "tree"
+     },
+     {
+      "path": "/srv/s14",
+      "measure": "tree"
+     },
+     {
+      "path": "/srv/s15",
+      "measure": "tree"
+     },
+     {
+      "path": "/srv/s16",
+      "measure": "tree"
+     }
+    ]
+   }
+  },
+  {
+   "name": "outer uncapped over an inner strict tree",
+   "valid": false,
+   "limits": {
+    "max_reserved_bytes": 1,
+    "storage_scopes": [
+     {
+      "path": "/srv",
+      "measure": "tree",
+      "uncapped": [
+       "state"
+      ]
+     },
+     {
+      "path": "/srv/state",
+      "measure": "tree"
+     }
+    ]
+   }
+  },
+  {
+   "name": "outer uncapped inside an inner tree",
+   "valid": false,
+   "limits": {
+    "max_reserved_bytes": 1,
+    "storage_scopes": [
+     {
+      "path": "/srv",
+      "measure": "tree",
+      "uncapped": [
+       "state/x"
+      ]
+     },
+     {
+      "path": "/srv/state",
+      "measure": "tree"
+     }
+    ]
+   }
+  },
+  {
+   "name": "inner uncapped under an outer strict tree",
+   "valid": false,
+   "limits": {
+    "max_reserved_bytes": 1,
+    "storage_scopes": [
+     {
+      "path": "/srv",
+      "measure": "tree"
+     },
+     {
+      "path": "/srv/state",
+      "measure": "tree",
+      "uncapped": [
+       "x"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "a duplicate path",
+   "valid": false,
+   "limits": {
+    "max_reserved_bytes": 1,
+    "storage_scopes": [
+     {
+      "path": "/srv",
+      "measure": "tree"
+     },
+     {
+      "path": "/srv",
+      "measure": "filesystem"
+     }
+    ]
+   }
+  },
+  {
+   "name": "uncapped on a filesystem",
+   "valid": false,
+   "limits": {
+    "max_reserved_bytes": 1,
+    "storage_scopes": [
+     {
+      "path": "/srv",
+      "measure": "filesystem",
+      "uncapped": [
+       "x"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "a relative path",
+   "valid": false,
+   "limits": {
+    "max_reserved_bytes": 1,
+    "storage_scopes": [
+     {
+      "path": "srv",
+      "measure": "tree"
+     }
+    ]
+   }
+  },
+  {
+   "name": "the root",
+   "valid": false,
+   "limits": {
+    "max_reserved_bytes": 1,
+    "storage_scopes": [
+     {
+      "path": "/",
+      "measure": "tree"
+     }
+    ]
+   }
+  },
+  {
+   "name": "a dot-dot path",
+   "valid": false,
+   "limits": {
+    "max_reserved_bytes": 1,
+    "storage_scopes": [
+     {
+      "path": "/srv/../x",
+      "measure": "tree"
+     }
+    ]
+   }
+  },
+  {
+   "name": "a trailing slash",
+   "valid": false,
+   "limits": {
+    "max_reserved_bytes": 1,
+    "storage_scopes": [
+     {
+      "path": "/srv/",
+      "measure": "tree"
+     }
+    ]
+   }
+  },
+  {
+   "name": "a space",
+   "valid": false,
+   "limits": {
+    "max_reserved_bytes": 1,
+    "storage_scopes": [
+     {
+      "path": "/srv/a b",
+      "measure": "tree"
+     }
+    ]
+   }
+  },
+  {
+   "name": "an absolute prefix",
+   "valid": false,
+   "limits": {
+    "max_reserved_bytes": 1,
+    "storage_scopes": [
+     {
+      "path": "/srv",
+      "measure": "tree",
+      "uncapped": [
+       "/x"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "a dot-dot prefix",
+   "valid": false,
+   "limits": {
+    "max_reserved_bytes": 1,
+    "storage_scopes": [
+     {
+      "path": "/srv",
+      "measure": "tree",
+      "uncapped": [
+       "../x"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "an empty component prefix",
+   "valid": false,
+   "limits": {
+    "max_reserved_bytes": 1,
+    "storage_scopes": [
+     {
+      "path": "/srv",
+      "measure": "tree",
+      "uncapped": [
+       "a//b"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "a duplicate prefix",
+   "valid": false,
+   "limits": {
+    "max_reserved_bytes": 1,
+    "storage_scopes": [
+     {
+      "path": "/srv",
+      "measure": "tree",
+      "uncapped": [
+       "a",
+       "a"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "a wildcard is literal and invalid",
+   "valid": false,
+   "limits": {
+    "max_reserved_bytes": 1,
+    "storage_scopes": [
+     {
+      "path": "/srv",
+      "measure": "tree",
+      "uncapped": [
+       "res*"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "an unknown measure",
+   "valid": false,
+   "limits": {
+    "max_reserved_bytes": 1,
+    "storage_scopes": [
+     {
+      "path": "/srv",
+      "measure": "quota"
+     }
+    ]
+   }
+  },
+  {
+   "name": "an unknown scope field",
+   "valid": false,
+   "limits": {
+    "max_reserved_bytes": 1,
+    "storage_scopes": [
+     {
+      "path": "/srv",
+      "measure": "tree",
+      "glob": "*"
+     }
+    ]
+   }
+  },
+  {
+   "name": "an unknown top field",
+   "valid": false,
+   "limits": {
+    "max_reserved_bytes": 1,
+    "roots": []
+   }
+  },
+  {
+   "name": "no threshold",
+   "valid": false,
+   "limits": {
+    "storage_scopes": []
+   }
+  },
+  {
+   "name": "a negative threshold",
+   "valid": false,
+   "limits": {
+    "max_reserved_bytes": -1
+   }
+  },
+  {
+   "name": "a string threshold",
+   "valid": false,
+   "limits": {
+    "max_reserved_bytes": "1"
+   }
+  },
+  {
+   "name": "raw: a duplicate top-level key",
+   "valid": false,
+   "raw": "{\"max_reserved_bytes\":1,\"max_reserved_bytes\":2}"
+  },
+  {
+   "name": "raw: duplicate storage_scopes keys",
+   "valid": false,
+   "raw": "{\"max_reserved_bytes\":1,\"storage_scopes\":[],\"storage_scopes\":[]}"
+  },
+  {
+   "name": "raw: a duplicate scope key",
+   "valid": false,
+   "raw": "{\"max_reserved_bytes\":1,\"storage_scopes\":[{\"path\":\"/srv\",\"path\":\"/srv\",\"measure\":\"tree\"}]}"
+  },
+  {
+   "name": "raw: the u64 maximum",
+   "valid": true,
+   "raw": "{\"max_reserved_bytes\":18446744073709551615}"
+  },
+  {
+   "name": "raw: one past the u64 maximum",
+   "valid": false,
+   "raw": "{\"max_reserved_bytes\":18446744073709551616}"
+  },
+  {
+   "name": "raw: zero",
+   "valid": true,
+   "raw": "{\"max_reserved_bytes\":0}"
+  },
+  {
+   "name": "raw: minus zero",
+   "valid": false,
+   "raw": "{\"max_reserved_bytes\":-0}"
+  },
+  {
+   "name": "raw: negative",
+   "valid": false,
+   "raw": "{\"max_reserved_bytes\":-1}"
+  },
+  {
+   "name": "raw: a bool threshold",
+   "valid": false,
+   "raw": "{\"max_reserved_bytes\":true}"
+  },
+  {
+   "name": "raw: a float threshold",
+   "valid": false,
+   "raw": "{\"max_reserved_bytes\":1.0}"
+  },
+  {
+   "name": "raw: an exponent threshold",
+   "valid": false,
+   "raw": "{\"max_reserved_bytes\":1e3}"
+  },
+  {
+   "name": "raw: a huge exponent",
+   "valid": false,
+   "raw": "{\"max_reserved_bytes\":1E400}"
+  },
+  {
+   "name": "raw: a string threshold",
+   "valid": false,
+   "raw": "{\"max_reserved_bytes\":\"1\"}"
+  },
+  {
+   "name": "raw: NaN",
+   "valid": false,
+   "raw": "{\"max_reserved_bytes\":NaN}"
+  },
+  {
+   "name": "raw: Infinity",
+   "valid": false,
+   "raw": "{\"max_reserved_bytes\":Infinity}"
+  },
+  {
+   "name": "raw: trailing garbage",
+   "valid": false,
+   "raw": "{\"max_reserved_bytes\":1}x"
+  },
+  {
+   "name": "raw: trailing whitespace",
+   "valid": true,
+   "raw": "{\"max_reserved_bytes\":1}\n"
+  },
+  {
+   "name": "raw: a null scope list",
+   "valid": false,
+   "raw": "{\"max_reserved_bytes\":1,\"storage_scopes\":null}"
+  },
+  {
+   "name": "raw: a lone surrogate prefix",
+   "valid": false,
+   "raw": "{\"max_reserved_bytes\":1,\"storage_scopes\":[{\"path\":\"/srv\",\"measure\":\"tree\",\"uncapped\":[\"\\ud800\"]}]}"
+  },
+  {
+   "name": "raw: deep nesting",
+   "valid": false,
+   "raw": "{\"max_reserved_bytes\":1,\"storage_scopes\":[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]}"
+  },
+  {
+   "name": "raw: UTF-16LE",
+   "valid": false,
+   "raw_hex": "7b0022006d00610078005f00720065007300650072007600650064005f006200790074006500730022003a0031007d00"
+  },
+  {
+   "name": "raw: UTF-16 with a BOM",
+   "valid": false,
+   "raw_hex": "fffe7b0022006d00610078005f00720065007300650072007600650064005f006200790074006500730022003a0031007d00"
+  },
+  {
+   "name": "raw: a UTF-8 BOM",
+   "valid": false,
+   "raw_hex": "efbbbf7b226d61785f72657365727665645f6279746573223a317d"
+  },
+  {
+   "name": "raw: invalid UTF-8 in a path",
+   "valid": false,
+   "raw_hex": "7b226d61785f72657365727665645f6279746573223a312c2273746f726167655f73636f706573223a5b7b2270617468223a222fff222c226d656173757265223a2274726565227d5d7d"
+  }
+ ]
+}

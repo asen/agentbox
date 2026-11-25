@@ -1,0 +1,31 @@
+#!/usr/bin/python3 -IB
+"""The transport server's entry (packaging/package.py:
+PREFIX/bin/agentbox-server), the controller's default `server`.
+
+Its package is beside this file's real location (a source tree's
+src/, or a private copy) or in PREFIX/share/agentbox-assets/
+controller; its relay child is `agentbox-relay` beside this file. Nothing
+comes from PATH, the working directory or PYTHONPATH (`-I`), and no
+bytecode is written (`-B`).
+"""
+import os
+import sys
+
+MIN_PYTHON = (3, 12)
+
+if __name__ == "__main__":
+    if sys.version_info[:2] < MIN_PYTHON:
+        sys.stderr.write("agentbox-server: needs Python 3.12 or later as /usr/bin/python3\n")
+        sys.exit(2)
+    HERE = os.path.dirname(os.path.realpath(__file__))
+    PACKAGED = os.path.join(os.path.dirname(HERE), "share", "agentbox-assets", "controller")
+    ROOT = next((root for root in (HERE, PACKAGED)
+                 if os.path.isfile(os.path.join(root, "agentbox_server", "main.py"))), None)
+    if ROOT is None:
+        sys.stderr.write("agentbox-server: no agentbox_server package beside it or in its prefix\n")
+        sys.exit(2)
+    sys.dont_write_bytecode = True
+    sys.path[:0] = [ROOT]
+    from agentbox_server import main
+
+    sys.exit(main.main(os.path.join(HERE, "agentbox-relay")))

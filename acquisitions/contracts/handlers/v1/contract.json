@@ -1,0 +1,77 @@
+{
+  "description": "Trusted acquisition handlers v1: the operator configuration, the handler manifest, the request file the host writes and the one result line a worker prints. See README.md.",
+  "version": 1,
+  "config": {
+    "schema": "agentbox.acquisition-config.v2",
+    "max_bytes": 16384,
+    "fields": ["schema", "interpreter", "assets", "handlers"],
+    "handler_fields": ["policy"],
+    "handler_optional": ["operations"],
+    "max_handlers": 8
+  },
+  "manifest": {
+    "schema": "agentbox.handler-manifest.v1",
+    "path": "ASSETS/acquisitions/ID/manifest.json",
+    "reserved_ids": ["lib"],
+    "max_bytes": 16384,
+    "fields": ["schema", "id", "version", "entry", "files", "operations", "metering"],
+    "optional": ["tools", "limits", "jail"],
+    "metering": ["http", "none"],
+    "id_pattern": "[a-z][a-z0-9-]{0,31}",
+    "operation_pattern": "[a-z][a-z0-9-]{0,31}",
+    "shim_pattern": "[a-z][a-z0-9._-]{0,31}",
+    "files_relative_to": "ASSETS/acquisitions",
+    "import_dir": "ASSETS/acquisitions/lib",
+    "import_dir_max_entries": 256,
+    "import_dir_max_depth": 8,
+    "max_operations": 16,
+    "max_files": 64,
+    "max_tools": 4,
+    "max_shims": 8,
+    "jail_entry_prefix": "acquisitions/ID/jail/",
+    "jail_fields": ["entry"],
+    "jail_optional": ["shims", "session"],
+    "session_wrapper": "agentbox-session",
+    "max_session_handlers": 1,
+    "reserved_shims": ["agentbox-request", "agentbox-guest", "agentbox-session", "node", "sh", "bash", "dash", "env", "sudo", "su", "login", "ssh", "scp", "sftp", "ssh-keygen", "cat", "cp", "mv", "rm", "ln", "ls", "mkdir", "chmod", "chown", "id", "kill", "ps", "test", "true", "false", "python", "python3"]
+  },
+  "limits": {
+    "ceilings": {"policy_bytes": 131072, "args_bytes": 61440, "metadata_bytes": 63488, "acquisition_seconds": 600},
+    "max_args_bytes": 61440,
+    "max_requests": 256,
+    "request_charged": "every attributable submission, busy, refused and denied ones included; at most one worker start each",
+    "max_acquired_bytes": 2147483648,
+    "acquired_charged": "http metering only: upstream HTTP body bytes the worker read, metadata and failed or partial bodies included; the whole remaining allowance is reserved per worker and settled to its reported count, kept whole without one",
+    "max_provenance": 256
+  },
+  "request": {
+    "schema": "agentbox.handler-request.v1",
+    "max_bytes": 262144,
+    "argv": ["INTERPRETER", "-I", "-B", "ENTRY", "acquire", "STAGE/request.json"],
+    "fields": ["schema", "handler", "version", "operation", "args", "policy", "ids", "stage", "artifact", "remaining_ms", "tools", "limits"],
+    "optional": ["test"],
+    "ids": ["run", "execution", "session", "request", "request_sha256"]
+  },
+  "stage": {
+    "request_file": "request.json",
+    "artifact_file": "artifact",
+    "mode": "0700 directory, 0600 files, this user's, no link"
+  },
+  "result": {
+    "schema": "agentbox.handler-result.v1",
+    "max_bytes": 262144,
+    "ok_fields": ["schema", "outcome", "size", "sha256", "metadata"],
+    "error_fields": ["schema", "outcome", "code"],
+    "metered_fields": ["acquired"],
+    "ok_optional": ["provenance"],
+    "provenance_fields": ["name", "version", "integrity"],
+    "code_pattern": "[a-z][a-z0-9_]{0,63}",
+    "metadata_key_pattern": "[A-Za-z0-9_.:@/+-]{1,128}"
+  },
+  "jail": {
+    "registry": "INSTALL/handlers.json",
+    "registry_schema": "agentbox.jail-handlers.v1",
+    "delivery_dir": "WORK/.agentbox-requests",
+    "upload_name": "SESSION-REQUEST.artifact"
+  }
+}

@@ -1,0 +1,8 @@
+# Agentbox's own build backend (packaging/agentbox_build.py): stdlib only,
+# no build requirement, so `pip install .` downloads nothing for the build
+# itself; the wheel needs cargo (agentbox-relay). Name, version and
+# metadata are the backend's (packaging/README.md).
+[build-system]
+requires = []
+build-backend = "agentbox_build"
+backend-path = ["packaging"]

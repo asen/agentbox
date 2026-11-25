@@ -1,0 +1,870 @@
+{
+  "description": "Shared acquisitions/contracts/artifacts/post-v1 fixtures. Bodies are UTF-8 text; body_hex gives raw bytes; body_parts is a list of parts where {repeat, count} stands for repeat concatenated count times. request_sha256 is the digest of a submit: SHA-256 of {\"client\":C,\"handler\":H,\"operation\":O,\"args\":A}, args canonical (keys sorted). heads are complete host request heads under the default broker head limits (8192 bytes, 1024 byte line, 32 fields), with the expected Content-Length or the fixed refusal code. http_responses are complete responses as the guest reads them, as a list of chunks ending in the server's close.",
+  "session": "0123456789abcdef0123456789abcdef",
+  "requests": {
+    "valid": [
+      {
+        "name": "submit pip files",
+        "body": "{\"v\":1,\"type\":\"submit\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\",\"handler\":\"pip\",\"operation\":\"files\",\"args\":{\"projects\":[\"example\"]}}",
+        "request_sha256": "b0457462d2cfeccc835aed17dde4f117a00b1dbe2a7731a2e0df1ade80c1afdc"
+      },
+      {
+        "name": "submit npm tarballs",
+        "body": "{\"v\":1,\"type\":\"submit\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\",\"handler\":\"npm\",\"operation\":\"tarballs\",\"args\":{\"packages\":[{\"name\":\"example\",\"version\":\"1.0.0\"}]}}",
+        "request_sha256": "d32a20bb6891864fb72462ed92c45598f0a1ee20d8d35581c45ece28d6ab390f"
+      },
+      {
+        "name": "submit git clone",
+        "body": "{\"v\":1,\"type\":\"submit\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\",\"handler\":\"git\",\"operation\":\"clone\",\"args\":{\"repository\":\"octocat/hello-world\"}}",
+        "request_sha256": "7d1aac590be7e4f9e3c858e0eee02964666b13e1fe3d225a220008d1da0f26e7"
+      },
+      {
+        "name": "submit git clone with a selector",
+        "body": "{\"v\":1,\"type\":\"submit\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\",\"handler\":\"git\",\"operation\":\"clone\",\"args\":{\"repository\":\"octocat/hello-world\",\"selector\":\"v1.0\"}}",
+        "request_sha256": "ef44b41b429992cea26d7331096ab7c349666a0a2e416f09760c92813b672178"
+      },
+      {
+        "name": "submit git fetch",
+        "body": "{\"v\":1,\"type\":\"submit\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\",\"handler\":\"git\",\"operation\":\"fetch\",\"args\":{\"repository\":\"octocat/hello-world\"}}",
+        "request_sha256": "2ca695b706b14478f0b7ae7e65db8385b4cadabd21306eb112a26414351ff560"
+      },
+      {
+        "name": "submit an unregistered handler (grammar only)",
+        "body": "{\"v\":1,\"type\":\"submit\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\",\"handler\":\"echo\",\"operation\":\"say\",\"args\":{\"text\":\"hié \\\"q\\\" \\\\ /\"}}",
+        "request_sha256": "5b1a9ceb19d8aa95881e1e741daf83d18876cc315685d6ad171491259263b7b7"
+      },
+      {
+        "name": "submit of the longest ids and words",
+        "body": "{\"v\":1,\"type\":\"submit\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"Abbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\",\"handler\":\"h-------------------------------\",\"operation\":\"oooooooooooooooooooooooooooooooo\",\"args\":{}}",
+        "request_sha256": "d8da060b0b200f40f77753061b41b273623ebbe9264343d512e7bf9f2178f53d"
+      },
+      {
+        "name": "submit with empty args",
+        "body": "{\"v\":1,\"type\":\"submit\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\",\"handler\":\"echo\",\"operation\":\"refuse\",\"args\":{}}",
+        "request_sha256": "e29bf2df2ecb7109d6c82c27d018909cfa4028595e4d20ba7633e57454180709"
+      },
+      {
+        "name": "submit with nested args, keys sorted",
+        "body": "{\"v\":1,\"type\":\"submit\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\",\"handler\":\"echo\",\"operation\":\"say\",\"args\":{\"M\":\"m\",\"a\":{\"b/c\":{\"d.e:f@g+h-i\":\"x\"}},\"z\":[1,0,9007199254740991,true,false,null]}}",
+        "request_sha256": "171aaab9657d6ccedea620c8d373a452418939cccf222ba83c92c5ffc1db852f"
+      },
+      {
+        "name": "cancel",
+        "body": "{\"v\":1,\"type\":\"cancel\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\"}"
+      },
+      {
+        "name": "result applied",
+        "body": "{\"v\":1,\"type\":\"result\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\",\"request\":\"r1\",\"request_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"sha256\":\"cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc\",\"status\":\"applied\"}"
+      },
+      {
+        "name": "result failed",
+        "body": "{\"v\":1,\"type\":\"result\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\",\"request\":\"r1\",\"request_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"sha256\":\"cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc\",\"status\":\"failed\"}"
+      },
+      {
+        "name": "a submit of exactly 65536 bytes",
+        "request_sha256": "3167912302cb791227dfbf463ef2b27445222d4ebfa3eed128350fa2c6c2e566",
+        "body_parts": [
+          "{\"v\":1,\"type\":\"submit\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\",\"handler\":\"echo\",\"operation\":\"say\",\"args\":{\"t\":\"",
+          {
+            "repeat": "x",
+            "count": 65403
+          },
+          "\"}}"
+        ]
+      }
+    ],
+    "invalid": [
+      {
+        "name": "reordered keys",
+        "body": "{\"type\":\"submit\",\"v\":1,\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\",\"handler\":\"pip\",\"operation\":\"files\",\"args\":{\"projects\":[\"example\"]}}",
+        "code": "invalid_field"
+      },
+      {
+        "name": "presentation whitespace",
+        "body": "{\"v\":1,\"type\":\"submit\", \"session\":\"0123456789abcdef0123456789abcdef\", \"client\":\"c1\", \"handler\":\"pip\", \"operation\":\"files\", \"args\":{\"projects\":[\"example\"]}}",
+        "code": "invalid_field"
+      },
+      {
+        "name": "an escaped letter",
+        "body": "{\"v\":1,\"type\":\"submit\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\",\"handler\":\"pip\",\"operation\":\"files\",\"args\":{\"projects\":[\"exampl\\u0065\"]}}",
+        "code": "invalid_field"
+      },
+      {
+        "name": "args keys out of order",
+        "body": "{\"v\":1,\"type\":\"submit\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\",\"handler\":\"echo\",\"operation\":\"say\",\"args\":{\"b\":1,\"a\":1}}",
+        "code": "invalid_field"
+      },
+      {
+        "name": "an uppercase session",
+        "body": "{\"v\":1,\"type\":\"submit\",\"session\":\"0123456789ABCDEF0123456789ABCDEF\",\"client\":\"c1\",\"handler\":\"pip\",\"operation\":\"files\",\"args\":{}}",
+        "code": "invalid_field"
+      },
+      {
+        "name": "a 31 digit session",
+        "body": "{\"v\":1,\"type\":\"submit\",\"session\":\"0123456789abcdef0123456789abcde\",\"client\":\"c1\",\"handler\":\"pip\",\"operation\":\"files\",\"args\":{}}",
+        "code": "invalid_field"
+      },
+      {
+        "name": "a 33 digit session",
+        "body": "{\"v\":1,\"type\":\"submit\",\"session\":\"0123456789abcdef0123456789abcdef0\",\"client\":\"c1\",\"handler\":\"pip\",\"operation\":\"files\",\"args\":{}}",
+        "code": "invalid_field"
+      },
+      {
+        "name": "an id session",
+        "body": "{\"v\":1,\"type\":\"submit\",\"session\":\"s-1\",\"client\":\"c1\",\"handler\":\"pip\",\"operation\":\"files\",\"args\":{}}",
+        "code": "invalid_field"
+      },
+      {
+        "name": "a bad client",
+        "body": "{\"v\":1,\"type\":\"submit\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"-c\",\"handler\":\"pip\",\"operation\":\"files\",\"args\":{}}",
+        "code": "invalid_field"
+      },
+      {
+        "name": "a missing handler",
+        "body": "{\"v\":1,\"type\":\"submit\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\",\"operation\":\"files\",\"args\":{}}",
+        "code": "missing_field"
+      },
+      {
+        "name": "a missing args",
+        "body": "{\"v\":1,\"type\":\"submit\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\",\"handler\":\"pip\",\"operation\":\"files\"}",
+        "code": "missing_field"
+      },
+      {
+        "name": "an unknown field beside a missing one",
+        "body": "{\"v\":1,\"type\":\"submit\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\",\"operation\":\"files\",\"args\":{},\"url\":\"https://x\"}",
+        "code": "unknown_field"
+      },
+      {
+        "name": "an uppercase handler",
+        "body": "{\"v\":1,\"type\":\"submit\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\",\"handler\":\"Pip\",\"operation\":\"files\",\"args\":{}}",
+        "code": "invalid_field"
+      },
+      {
+        "name": "a handler too long",
+        "body": "{\"v\":1,\"type\":\"submit\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\",\"handler\":\"hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh\",\"operation\":\"files\",\"args\":{}}",
+        "code": "invalid_field"
+      },
+      {
+        "name": "a path as handler",
+        "body": "{\"v\":1,\"type\":\"submit\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\",\"handler\":\"../pip\",\"operation\":\"files\",\"args\":{}}",
+        "code": "invalid_field"
+      },
+      {
+        "name": "an operation with an underscore",
+        "body": "{\"v\":1,\"type\":\"submit\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\",\"handler\":\"pip\",\"operation\":\"pip_files\",\"args\":{}}",
+        "code": "invalid_field"
+      },
+      {
+        "name": "args an array",
+        "body": "{\"v\":1,\"type\":\"submit\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\",\"handler\":\"pip\",\"operation\":\"files\",\"args\":[]}",
+        "code": "invalid_field"
+      },
+      {
+        "name": "args a string",
+        "body": "{\"v\":1,\"type\":\"submit\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\",\"handler\":\"pip\",\"operation\":\"files\",\"args\":\"projects\"}",
+        "code": "invalid_field"
+      },
+      {
+        "name": "an args key with a space",
+        "body": "{\"v\":1,\"type\":\"submit\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\",\"handler\":\"echo\",\"operation\":\"say\",\"args\":{\"a b\":1}}",
+        "code": "invalid_field"
+      },
+      {
+        "name": "a nested args key too long",
+        "body": "{\"v\":1,\"type\":\"submit\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\",\"handler\":\"echo\",\"operation\":\"say\",\"args\":{\"a\":{\"kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk\":1}}}",
+        "code": "invalid_field"
+      },
+      {
+        "name": "an args negative number",
+        "body": "{\"v\":1,\"type\":\"submit\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\",\"handler\":\"echo\",\"operation\":\"say\",\"args\":{\"n\":-1}}",
+        "code": "invalid_number"
+      },
+      {
+        "name": "an args fraction",
+        "body": "{\"v\":1,\"type\":\"submit\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\",\"handler\":\"echo\",\"operation\":\"say\",\"args\":{\"n\":1.5}}",
+        "code": "invalid_number"
+      },
+      {
+        "name": "a duplicate args key",
+        "body": "{\"v\":1,\"type\":\"submit\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\",\"handler\":\"echo\",\"operation\":\"say\",\"args\":{\"a\":1,\"a\":2}}",
+        "code": "duplicate_key"
+      },
+      {
+        "name": "a cancel naming a request",
+        "body": "{\"v\":1,\"type\":\"cancel\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\",\"request\":\"r1\"}",
+        "code": "unknown_field"
+      },
+      {
+        "name": "a result without its artifact",
+        "body": "{\"v\":1,\"type\":\"result\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\",\"request\":\"r1\",\"request_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"status\":\"applied\"}",
+        "code": "missing_field"
+      },
+      {
+        "name": "a result claiming installed",
+        "body": "{\"v\":1,\"type\":\"result\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\",\"request\":\"r1\",\"request_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"sha256\":\"cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc\",\"status\":\"installed\"}",
+        "code": "invalid_field"
+      },
+      {
+        "name": "a result with a short digest",
+        "body": "{\"v\":1,\"type\":\"result\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\",\"request\":\"r1\",\"request_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"sha256\":\"ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc\",\"status\":\"applied\"}",
+        "code": "invalid_field"
+      },
+      {
+        "name": "a result with an uppercase digest",
+        "body": "{\"v\":1,\"type\":\"result\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\",\"request\":\"r1\",\"request_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"sha256\":\"CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC\",\"status\":\"applied\"}",
+        "code": "invalid_field"
+      },
+      {
+        "name": "version 2",
+        "body": "{\"v\":2,\"type\":\"submit\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\",\"handler\":\"pip\",\"operation\":\"files\",\"args\":{\"projects\":[\"example\"]}}",
+        "code": "unsupported_version"
+      },
+      {
+        "name": "version 1.0",
+        "body": "{\"v\":1.0,\"type\":\"submit\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\",\"handler\":\"pip\",\"operation\":\"files\",\"args\":{\"projects\":[\"example\"]}}",
+        "code": "invalid_number"
+      },
+      {
+        "name": "version as text",
+        "body": "{\"v\":\"1\",\"type\":\"submit\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\",\"handler\":\"pip\",\"operation\":\"files\",\"args\":{\"projects\":[\"example\"]}}",
+        "code": "invalid_version"
+      },
+      {
+        "name": "no version",
+        "body": "{\"type\":\"submit\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\",\"handler\":\"pip\",\"operation\":\"files\",\"args\":{\"projects\":[\"example\"]}}",
+        "code": "invalid_version"
+      },
+      {
+        "name": "a response type",
+        "body": "{\"v\":1,\"type\":\"ready\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\",\"handler\":\"pip\",\"operation\":\"files\",\"args\":{\"projects\":[\"example\"]}}",
+        "code": "wrong_direction"
+      },
+      {
+        "name": "an old frame type",
+        "body": "{\"v\":1,\"type\":\"request\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\",\"handler\":\"pip\",\"operation\":\"files\",\"args\":{\"projects\":[\"example\"]}}",
+        "code": "unknown_type"
+      },
+      {
+        "name": "a duplicate key",
+        "body": "{\"v\":1,\"type\":\"submit\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\",\"client\":\"c2\",\"handler\":\"pip\",\"operation\":\"files\",\"args\":{\"projects\":[\"example\"]}}",
+        "code": "duplicate_key"
+      },
+      {
+        "name": "an LF inside",
+        "body": "{\"v\":1,\"type\":\"submit\",\n\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\",\"handler\":\"pip\",\"operation\":\"files\",\"args\":{\"projects\":[\"example\"]}}",
+        "code": "invalid_framing"
+      },
+      {
+        "name": "not an object",
+        "body": "[1]",
+        "code": "not_object"
+      },
+      {
+        "name": "nesting depth 17",
+        "body": "{\"v\":1,\"type\":\"submit\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\",\"handler\":\"echo\",\"operation\":\"say\",\"args\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":1}}}}}}}}}}}}}}}}}",
+        "code": "invalid_json"
+      },
+      {
+        "name": "truncated JSON",
+        "body": "{\"v\":1,\"type\":\"submit\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\",\"handler\":\"pip\",\"operation\":\"files\",\"args\":{\"projects\":[\"example\"]}",
+        "code": "invalid_json"
+      },
+      {
+        "name": "invalid UTF-8",
+        "body_hex": "7b2276223a312c2274797065223a227375626d6974222c2273657373696f6e223a223031323334353637383961626364656630313233343536373839616263646566222c22636c69656e74223a226331222c2268616e646c6572223a22706970222c226f7065726174696f6e223a2266696c6573222c2261726773223a7b2270726f6a65637473223a5b226578ff6d706c65225d7d7d",
+        "code": "invalid_encoding"
+      },
+      {
+        "name": "a leading UTF-8 BOM",
+        "body_hex": "efbbbf7b2276223a312c2274797065223a227375626d6974222c2273657373696f6e223a223031323334353637383961626364656630313233343536373839616263646566222c22636c69656e74223a226331222c2268616e646c6572223a22706970222c226f7065726174696f6e223a2266696c6573222c2261726773223a7b2270726f6a65637473223a5b226578616d706c65225d7d7d",
+        "code": "invalid_json"
+      },
+      {
+        "name": "a body above 65536 bytes",
+        "code": "frame_too_large",
+        "body_parts": [
+          "{\"v\":1,\"type\":\"submit\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\",\"handler\":\"echo\",\"operation\":\"say\",\"args\":{\"t\":\"",
+          {
+            "repeat": "x",
+            "count": 65404
+          },
+          "\"}}"
+        ]
+      }
+    ]
+  },
+  "responses": {
+    "valid": [
+      {
+        "name": "ready pip",
+        "body": "{\"v\":1,\"type\":\"ready\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\",\"request\":\"r1\",\"request_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"handler\":\"pip\",\"operation\":\"files\",\"size\":100,\"sha256\":\"cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc\",\"metadata\":{\"format\":\"agentbox.pip.batch.v1\",\"items\":1}}",
+        "status": 200
+      },
+      {
+        "name": "ready with nested metadata, keys sorted",
+        "body": "{\"v\":1,\"type\":\"ready\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\",\"request\":\"r1\",\"request_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"handler\":\"echo\",\"operation\":\"say\",\"size\":100,\"sha256\":\"cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc\",\"metadata\":{\"manifest\":{\"items\":[{\"bytes\":4,\"name\":\"alpha-1.0.tar.gz\",\"sha256\":\"dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd\"}],\"schema\":\"example.v1\",\"target\":\"x86_64\"},\"manifest_sha256\":\"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee\"}}",
+        "status": 200
+      },
+      {
+        "name": "ready git",
+        "body": "{\"v\":1,\"type\":\"ready\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\",\"request\":\"r1\",\"request_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"handler\":\"git\",\"operation\":\"clone\",\"size\":4096,\"sha256\":\"cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc\",\"metadata\":{\"manifest_sha256\":\"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee\"}}",
+        "status": 200
+      },
+      {
+        "name": "ready of the largest safe size and empty metadata",
+        "body": "{\"v\":1,\"type\":\"ready\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\",\"request\":\"r1\",\"request_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"handler\":\"echo\",\"operation\":\"say\",\"size\":9007199254740991,\"sha256\":\"cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc\",\"metadata\":{}}",
+        "status": 200
+      },
+      {
+        "name": "rejected busy",
+        "body": "{\"v\":1,\"type\":\"rejected\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c2\",\"code\":\"busy\"}",
+        "status": 200
+      },
+      {
+        "name": "rejected submission limit",
+        "body": "{\"v\":1,\"type\":\"rejected\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c2\",\"code\":\"submission_limit\"}",
+        "status": 200
+      },
+      {
+        "name": "closed denied by the lane",
+        "body": "{\"v\":1,\"type\":\"closed\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\",\"request\":\"r1\",\"request_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"handler\":\"pip\",\"outcome\":\"denied\",\"reason\":\"byte_limit\"}",
+        "status": 200
+      },
+      {
+        "name": "closed denied by a worker code",
+        "body": "{\"v\":1,\"type\":\"closed\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\",\"request\":\"r1\",\"request_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"handler\":\"git\",\"outcome\":\"denied\",\"reason\":\"git_repository_denied\"}",
+        "status": 200
+      },
+      {
+        "name": "closed denied with the longest code",
+        "body": "{\"v\":1,\"type\":\"closed\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\",\"request\":\"r1\",\"request_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"handler\":\"echo\",\"outcome\":\"denied\",\"reason\":\"e_______________________________________________________________\"}",
+        "status": 200
+      },
+      {
+        "name": "closed expired",
+        "body": "{\"v\":1,\"type\":\"closed\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\",\"request\":\"r1\",\"request_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"handler\":\"pip\",\"outcome\":\"expired\"}",
+        "status": 200
+      },
+      {
+        "name": "closed cancelled",
+        "body": "{\"v\":1,\"type\":\"closed\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\",\"request\":\"r1\",\"request_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"handler\":\"npm\",\"outcome\":\"cancelled\"}",
+        "status": 200
+      },
+      {
+        "name": "closed recorded",
+        "body": "{\"v\":1,\"type\":\"closed\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\",\"request\":\"r1\",\"request_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"handler\":\"git\",\"outcome\":\"recorded\"}",
+        "status": 200
+      },
+      {
+        "name": "error invalid_json",
+        "body": "{\"v\":1,\"type\":\"error\",\"code\":\"invalid_json\"}",
+        "status": 400
+      },
+      {
+        "name": "error session_mismatch",
+        "body": "{\"v\":1,\"type\":\"error\",\"code\":\"session_mismatch\"}",
+        "status": 403
+      },
+      {
+        "name": "error not_active",
+        "body": "{\"v\":1,\"type\":\"error\",\"code\":\"not_active\"}",
+        "status": 409
+      },
+      {
+        "name": "error binding_mismatch",
+        "body": "{\"v\":1,\"type\":\"error\",\"code\":\"binding_mismatch\"}",
+        "status": 409
+      }
+    ],
+    "invalid": [
+      {
+        "name": "ready with metadata keys out of order",
+        "body": "{\"v\":1,\"type\":\"ready\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\",\"request\":\"r1\",\"request_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"handler\":\"echo\",\"operation\":\"say\",\"size\":1,\"sha256\":\"cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc\",\"metadata\":{\"b\":1,\"a\":1}}",
+        "code": "invalid_field"
+      },
+      {
+        "name": "ready with an array metadata",
+        "body": "{\"v\":1,\"type\":\"ready\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\",\"request\":\"r1\",\"request_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"handler\":\"echo\",\"operation\":\"say\",\"size\":1,\"sha256\":\"cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc\",\"metadata\":[]}",
+        "code": "invalid_field"
+      },
+      {
+        "name": "ready with a bad metadata key",
+        "body": "{\"v\":1,\"type\":\"ready\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\",\"request\":\"r1\",\"request_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"handler\":\"echo\",\"operation\":\"say\",\"size\":1,\"sha256\":\"cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc\",\"metadata\":{\"a b\":1}}",
+        "code": "invalid_field"
+      },
+      {
+        "name": "ready of no bytes",
+        "body": "{\"v\":1,\"type\":\"ready\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\",\"request\":\"r1\",\"request_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"handler\":\"echo\",\"operation\":\"say\",\"size\":0,\"sha256\":\"cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc\",\"metadata\":{}}",
+        "code": "invalid_field"
+      },
+      {
+        "name": "ready above the safe integers",
+        "body": "{\"v\":1,\"type\":\"ready\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\",\"request\":\"r1\",\"request_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"handler\":\"echo\",\"operation\":\"say\",\"size\":9007199254740992,\"sha256\":\"cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc\",\"metadata\":{}}",
+        "code": "invalid_number"
+      },
+      {
+        "name": "ready without an operation",
+        "body": "{\"v\":1,\"type\":\"ready\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\",\"request\":\"r1\",\"request_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"handler\":\"git\",\"size\":1,\"sha256\":\"cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc\",\"metadata\":{}}",
+        "code": "missing_field"
+      },
+      {
+        "name": "ready with a manifest field",
+        "body": "{\"v\":1,\"type\":\"ready\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\",\"request\":\"r1\",\"request_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"handler\":\"git\",\"operation\":\"clone\",\"size\":4096,\"sha256\":\"cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc\",\"manifest\":{},\"metadata\":{\"manifest_sha256\":\"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee\"}}",
+        "code": "unknown_field"
+      },
+      {
+        "name": "ready of an id session",
+        "body": "{\"v\":1,\"type\":\"ready\",\"session\":\"s-1\",\"client\":\"c1\",\"request\":\"r1\",\"request_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"handler\":\"git\",\"operation\":\"clone\",\"size\":4096,\"sha256\":\"cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc\",\"metadata\":{\"manifest_sha256\":\"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee\"}}",
+        "code": "invalid_field"
+      },
+      {
+        "name": "ready with an uppercase handler",
+        "body": "{\"v\":1,\"type\":\"ready\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\",\"request\":\"r1\",\"request_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"handler\":\"Git\",\"operation\":\"clone\",\"size\":1,\"sha256\":\"cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc\",\"metadata\":{}}",
+        "code": "invalid_field"
+      },
+      {
+        "name": "closed denied without a reason",
+        "body": "{\"v\":1,\"type\":\"closed\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\",\"request\":\"r1\",\"request_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"handler\":\"git\",\"outcome\":\"denied\"}",
+        "code": "invalid_field"
+      },
+      {
+        "name": "closed recorded with a reason",
+        "body": "{\"v\":1,\"type\":\"closed\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\",\"request\":\"r1\",\"request_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"handler\":\"git\",\"outcome\":\"recorded\",\"reason\":\"policy\"}",
+        "code": "invalid_field"
+      },
+      {
+        "name": "closed denied with an uppercase reason",
+        "body": "{\"v\":1,\"type\":\"closed\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\",\"request\":\"r1\",\"request_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"handler\":\"git\",\"outcome\":\"denied\",\"reason\":\"Policy\"}",
+        "code": "invalid_field"
+      },
+      {
+        "name": "closed denied with a reason too long",
+        "body": "{\"v\":1,\"type\":\"closed\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\",\"request\":\"r1\",\"request_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"handler\":\"git\",\"outcome\":\"denied\",\"reason\":\"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee\"}",
+        "code": "invalid_field"
+      },
+      {
+        "name": "closed without a handler",
+        "body": "{\"v\":1,\"type\":\"closed\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\",\"request\":\"r1\",\"request_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"outcome\":\"expired\"}",
+        "code": "missing_field"
+      },
+      {
+        "name": "closed with an unknown outcome",
+        "body": "{\"v\":1,\"type\":\"closed\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\",\"request\":\"r1\",\"request_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"handler\":\"git\",\"outcome\":\"approved\"}",
+        "code": "invalid_field"
+      },
+      {
+        "name": "rejected with another code",
+        "body": "{\"v\":1,\"type\":\"rejected\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c2\",\"code\":\"denied\"}",
+        "code": "invalid_field"
+      },
+      {
+        "name": "error with an unknown code",
+        "body": "{\"v\":1,\"type\":\"error\",\"code\":\"teapot\"}",
+        "code": "invalid_field"
+      },
+      {
+        "name": "a request type",
+        "body": "{\"v\":1,\"type\":\"submit\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\",\"request\":\"r1\",\"request_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"handler\":\"git\",\"operation\":\"clone\",\"size\":4096,\"sha256\":\"cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc\",\"metadata\":{\"manifest_sha256\":\"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee\"}}",
+        "code": "wrong_direction"
+      },
+      {
+        "name": "a leading UTF-8 BOM",
+        "body_hex": "efbbbf7b2276223a312c2274797065223a227265616479222c2273657373696f6e223a223031323334353637383961626364656630313233343536373839616263646566222c22636c69656e74223a226331222c2272657175657374223a227231222c22726571756573745f736861323536223a2261616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161222c2268616e646c6572223a22676974222c226f7065726174696f6e223a22636c6f6e65222c2273697a65223a343039362c22736861323536223a2263636363636363636363636363636363636363636363636363636363636363636363636363636363636363636363636363636363636363636363636363636363222c226d65746164617461223a7b226d616e69666573745f736861323536223a2265656565656565656565656565656565656565656565656565656565656565656565656565656565656565656565656565656565656565656565656565656565227d7d",
+        "code": "invalid_json"
+      }
+    ]
+  },
+  "heads": {
+    "canonical": "POST /agentbox/v1/request HTTP/1.1\r\nHost: agentbox\r\nContent-Type: application/json\r\nContent-Length: {length}\r\nConnection: close\r\n\r\n",
+    "valid": [
+      {
+        "name": "the canonical head",
+        "head": "POST /agentbox/v1/request HTTP/1.1\r\nHost: agentbox\r\nContent-Type: application/json\r\nContent-Length: 123\r\nConnection: close\r\n\r\n",
+        "content_length": 123
+      },
+      {
+        "name": "any order, any name case, optional whitespace",
+        "head": "POST /agentbox/v1/request HTTP/1.1\r\nconnection:close\r\ncontent-length: \t0 \r\nCONTENT-TYPE:application/json\r\nhost:  agentbox\t\r\n\r\n",
+        "content_length": 0
+      },
+      {
+        "name": "the largest body",
+        "head": "POST /agentbox/v1/request HTTP/1.1\r\nHost: agentbox\r\nContent-Type: application/json\r\nContent-Length: 65536\r\nConnection: close\r\n\r\n",
+        "content_length": 65536
+      }
+    ],
+    "invalid": [
+      {
+        "name": "a body above 65536 bytes",
+        "head": "POST /agentbox/v1/request HTTP/1.1\r\nHost: agentbox\r\nContent-Type: application/json\r\nContent-Length: 65537\r\nConnection: close\r\n\r\n",
+        "code": "request_body_too_large"
+      },
+      {
+        "name": "a 21 digit length",
+        "head": "POST /agentbox/v1/request HTTP/1.1\r\nHost: agentbox\r\nContent-Type: application/json\r\nContent-Length: 100000000000000000000\r\nConnection: close\r\n\r\n",
+        "code": "request_body_too_large"
+      },
+      {
+        "name": "a leading zero length",
+        "head": "POST /agentbox/v1/request HTTP/1.1\r\nHost: agentbox\r\nContent-Type: application/json\r\nContent-Length: 0123\r\nConnection: close\r\n\r\n",
+        "code": "request_framing_invalid"
+      },
+      {
+        "name": "a signed length",
+        "head": "POST /agentbox/v1/request HTTP/1.1\r\nHost: agentbox\r\nContent-Type: application/json\r\nContent-Length: +123\r\nConnection: close\r\n\r\n",
+        "code": "request_framing_invalid"
+      },
+      {
+        "name": "a length list",
+        "head": "POST /agentbox/v1/request HTTP/1.1\r\nHost: agentbox\r\nContent-Type: application/json\r\nContent-Length: 123, 123\r\nConnection: close\r\n\r\n",
+        "code": "request_framing_invalid"
+      },
+      {
+        "name": "an empty length",
+        "head": "POST /agentbox/v1/request HTTP/1.1\r\nHost: agentbox\r\nContent-Type: application/json\r\nContent-Length:\r\nConnection: close\r\n\r\n",
+        "code": "request_framing_invalid"
+      },
+      {
+        "name": "two lengths",
+        "head": "POST /agentbox/v1/request HTTP/1.1\r\nHost: agentbox\r\nContent-Type: application/json\r\nContent-Length: 123\r\nConnection: close\r\nContent-Length: 123\r\n\r\n",
+        "code": "request_framing_invalid"
+      },
+      {
+        "name": "no length",
+        "head": "POST /agentbox/v1/request HTTP/1.1\r\nHost: agentbox\r\nContent-Type: application/json\r\nConnection: close\r\n\r\n",
+        "code": "request_framing_invalid"
+      },
+      {
+        "name": "a transfer encoding",
+        "head": "POST /agentbox/v1/request HTTP/1.1\r\nHost: agentbox\r\nContent-Type: application/json\r\nContent-Length: 123\r\nConnection: close\r\nTransfer-Encoding: chunked\r\n\r\n",
+        "code": "request_framing_invalid"
+      },
+      {
+        "name": "a content encoding",
+        "head": "POST /agentbox/v1/request HTTP/1.1\r\nHost: agentbox\r\nContent-Type: application/json\r\nContent-Length: 123\r\nConnection: close\r\nContent-Encoding: gzip\r\n\r\n",
+        "code": "request_framing_invalid"
+      },
+      {
+        "name": "an expectation",
+        "head": "POST /agentbox/v1/request HTTP/1.1\r\nHost: agentbox\r\nContent-Type: application/json\r\nContent-Length: 123\r\nConnection: close\r\nExpect: 100-continue\r\n\r\n",
+        "code": "request_framing_invalid"
+      },
+      {
+        "name": "an upgrade",
+        "head": "POST /agentbox/v1/request HTTP/1.1\r\nHost: agentbox\r\nContent-Type: application/json\r\nContent-Length: 123\r\nConnection: close\r\nUpgrade: websocket\r\n\r\n",
+        "code": "request_framing_invalid"
+      },
+      {
+        "name": "keep-alive",
+        "head": "POST /agentbox/v1/request HTTP/1.1\r\nHost: agentbox\r\nContent-Type: application/json\r\nContent-Length: 123\r\nConnection: keep-alive\r\n\r\n",
+        "code": "request_framing_invalid"
+      },
+      {
+        "name": "a connection list",
+        "head": "POST /agentbox/v1/request HTTP/1.1\r\nHost: agentbox\r\nContent-Type: application/json\r\nContent-Length: 123\r\nConnection: close, upgrade\r\n\r\n",
+        "code": "request_framing_invalid"
+      },
+      {
+        "name": "no connection field",
+        "head": "POST /agentbox/v1/request HTTP/1.1\r\nHost: agentbox\r\nContent-Type: application/json\r\nContent-Length: 123\r\n\r\n",
+        "code": "request_framing_invalid"
+      },
+      {
+        "name": "no host",
+        "head": "POST /agentbox/v1/request HTTP/1.1\r\nContent-Type: application/json\r\nContent-Length: 123\r\nConnection: close\r\n\r\n",
+        "code": "request_header_invalid"
+      },
+      {
+        "name": "the proxy authority as host",
+        "head": "POST /agentbox/v1/request HTTP/1.1\r\nHost: 127.0.0.1:3128\r\nContent-Type: application/json\r\nContent-Length: 123\r\nConnection: close\r\n\r\n",
+        "code": "request_header_invalid"
+      },
+      {
+        "name": "an uppercase host",
+        "head": "POST /agentbox/v1/request HTTP/1.1\r\nHost: AGENTBOX\r\nContent-Type: application/json\r\nContent-Length: 123\r\nConnection: close\r\n\r\n",
+        "code": "request_header_invalid"
+      },
+      {
+        "name": "two hosts",
+        "head": "POST /agentbox/v1/request HTTP/1.1\r\nHost: agentbox\r\nContent-Type: application/json\r\nContent-Length: 123\r\nConnection: close\r\nHost: agentbox\r\n\r\n",
+        "code": "request_header_invalid"
+      },
+      {
+        "name": "another media type",
+        "head": "POST /agentbox/v1/request HTTP/1.1\r\nHost: agentbox\r\nContent-Type: text/plain\r\nContent-Length: 123\r\nConnection: close\r\n\r\n",
+        "code": "request_header_invalid"
+      },
+      {
+        "name": "a charset parameter",
+        "head": "POST /agentbox/v1/request HTTP/1.1\r\nHost: agentbox\r\nContent-Type: application/json; charset=utf-8\r\nContent-Length: 123\r\nConnection: close\r\n\r\n",
+        "code": "request_header_invalid"
+      },
+      {
+        "name": "no content type",
+        "head": "POST /agentbox/v1/request HTTP/1.1\r\nHost: agentbox\r\nContent-Length: 123\r\nConnection: close\r\n\r\n",
+        "code": "request_header_invalid"
+      },
+      {
+        "name": "an extra field",
+        "head": "POST /agentbox/v1/request HTTP/1.1\r\nHost: agentbox\r\nContent-Type: application/json\r\nContent-Length: 123\r\nConnection: close\r\nX-A: b\r\n\r\n",
+        "code": "request_header_invalid"
+      },
+      {
+        "name": "credentials",
+        "head": "POST /agentbox/v1/request HTTP/1.1\r\nHost: agentbox\r\nContent-Type: application/json\r\nContent-Length: 123\r\nConnection: close\r\nAuthorization: Bearer x\r\n\r\n",
+        "code": "request_header_invalid"
+      },
+      {
+        "name": "a query",
+        "head": "POST /agentbox/v1/request?x=1 HTTP/1.1\r\nHost: agentbox\r\nContent-Type: application/json\r\nContent-Length: 123\r\nConnection: close\r\n\r\n",
+        "code": "request_target_invalid"
+      },
+      {
+        "name": "an absolute URL",
+        "head": "POST http://agentbox/agentbox/v1/request HTTP/1.1\r\nHost: agentbox\r\nContent-Type: application/json\r\nContent-Length: 123\r\nConnection: close\r\n\r\n",
+        "code": "request_target_invalid"
+      },
+      {
+        "name": "a trailing slash",
+        "head": "POST /agentbox/v1/request/ HTTP/1.1\r\nHost: agentbox\r\nContent-Type: application/json\r\nContent-Length: 123\r\nConnection: close\r\n\r\n",
+        "code": "request_target_invalid"
+      },
+      {
+        "name": "a dot segment",
+        "head": "POST /agentbox/v1/../v1/request HTTP/1.1\r\nHost: agentbox\r\nContent-Type: application/json\r\nContent-Length: 123\r\nConnection: close\r\n\r\n",
+        "code": "request_target_invalid"
+      },
+      {
+        "name": "an asterisk",
+        "head": "POST * HTTP/1.1\r\nHost: agentbox\r\nContent-Type: application/json\r\nContent-Length: 123\r\nConnection: close\r\n\r\n",
+        "code": "request_target_invalid"
+      },
+      {
+        "name": "another path",
+        "head": "POST /agentbox/v2/request HTTP/1.1\r\nHost: agentbox\r\nContent-Type: application/json\r\nContent-Length: 123\r\nConnection: close\r\n\r\n",
+        "code": "request_target_invalid"
+      },
+      {
+        "name": "HTTP/1.0",
+        "head": "POST /agentbox/v1/request HTTP/1.0\r\nHost: agentbox\r\nContent-Type: application/json\r\nContent-Length: 123\r\nConnection: close\r\n\r\n",
+        "code": "request_malformed"
+      },
+      {
+        "name": "two spaces",
+        "head": "POST  /agentbox/v1/request HTTP/1.1\r\nHost: agentbox\r\nContent-Type: application/json\r\nContent-Length: 123\r\nConnection: close\r\n\r\n",
+        "code": "request_malformed"
+      },
+      {
+        "name": "a trailing space",
+        "head": "POST /agentbox/v1/request HTTP/1.1 \r\nHost: agentbox\r\nContent-Type: application/json\r\nContent-Length: 123\r\nConnection: close\r\n\r\n",
+        "code": "request_malformed"
+      },
+      {
+        "name": "an obs-fold",
+        "head": "POST /agentbox/v1/request HTTP/1.1\r\nHost: agentbox\r\nContent-Type: application/json\r\nContent-Length: 123\r\nConnection: close\r\n folded\r\n\r\n",
+        "code": "request_malformed"
+      },
+      {
+        "name": "a bare LF",
+        "head": "POST /agentbox/v1/request HTTP/1.1\r\nHost: agentbox\nContent-Type: application/json\r\nContent-Length: 123\r\nConnection: close\r\n\r\n",
+        "code": "request_malformed"
+      },
+      {
+        "name": "a space before the colon",
+        "head": "POST /agentbox/v1/request HTTP/1.1\r\nHost : agentbox\r\nContent-Type: application/json\r\nContent-Length: 123\r\nConnection: close\r\n\r\n",
+        "code": "request_malformed"
+      },
+      {
+        "name": "a NUL value",
+        "head": "POST /agentbox/v1/request HTTP/1.1\r\nHost: agentbox\r\nContent-Type: application/json\r\nContent-Length: 123\r\nConnection: close\r\nX-A: \u0000\r\n\r\n",
+        "code": "request_malformed"
+      },
+      {
+        "name": "no blank line",
+        "head": "POST /agentbox/v1/request HTTP/1.1\r\nHost: agentbox\r\nContent-Type: application/json\r\nContent-Length: 123\r\nConnection: close\r\n",
+        "code": "request_malformed"
+      },
+      {
+        "name": "33 fields",
+        "head": "POST /agentbox/v1/request HTTP/1.1\r\nHost: agentbox\r\nContent-Type: application/json\r\nContent-Length: 123\r\nConnection: close\r\nX-A: b\r\nX-A: b\r\nX-A: b\r\nX-A: b\r\nX-A: b\r\nX-A: b\r\nX-A: b\r\nX-A: b\r\nX-A: b\r\nX-A: b\r\nX-A: b\r\nX-A: b\r\nX-A: b\r\nX-A: b\r\nX-A: b\r\nX-A: b\r\nX-A: b\r\nX-A: b\r\nX-A: b\r\nX-A: b\r\nX-A: b\r\nX-A: b\r\nX-A: b\r\nX-A: b\r\nX-A: b\r\nX-A: b\r\nX-A: b\r\nX-A: b\r\nX-A: b\r\n\r\n",
+        "code": "request_headers_too_many"
+      },
+      {
+        "name": "a long request line",
+        "head": "POST /aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa HTTP/1.1\r\nHost: agentbox\r\nContent-Type: application/json\r\nContent-Length: 123\r\nConnection: close\r\n\r\n",
+        "code": "request_line_too_long"
+      },
+      {
+        "name": "lowercase post, CONNECT rules: no length",
+        "head": "post /agentbox/v1/request HTTP/1.1\r\nHost: agentbox\r\n\r\n",
+        "code": "method_not_allowed"
+      },
+      {
+        "name": "GET, CONNECT rules: no length",
+        "head": "GET /agentbox/v1/request HTTP/1.1\r\nHost: agentbox\r\n\r\n",
+        "code": "method_not_allowed"
+      },
+      {
+        "name": "GET, CONNECT rules: a length first",
+        "head": "GET /agentbox/v1/request HTTP/1.1\r\nHost: agentbox\r\nContent-Type: application/json\r\nContent-Length: 123\r\nConnection: close\r\n\r\n",
+        "code": "request_framing_invalid"
+      },
+      {
+        "name": "a CONNECT with a length",
+        "head": "CONNECT api.example.com:443 HTTP/1.1\r\nContent-Length: 0\r\n\r\n",
+        "code": "request_framing_invalid"
+      }
+    ]
+  },
+  "http_responses": {
+    "valid": [
+      {
+        "name": "ok",
+        "chunks": [
+          "HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nContent-Length: 98\r\nConnection: close\r\n\r\n{\"v\":1,\"type\":\"rejected\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c2\",\"code\":\"busy\"}"
+        ],
+        "status": 200,
+        "body": "{\"v\":1,\"type\":\"rejected\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c2\",\"code\":\"busy\"}"
+      },
+      {
+        "name": "bad request",
+        "chunks": [
+          "HTTP/1.1 400 Bad Request\r\nContent-Type: application/json\r\nContent-Length: 44\r\nConnection: close\r\n\r\n{\"v\":1,\"type\":\"error\",\"code\":\"invalid_json\"}"
+        ],
+        "status": 400,
+        "body": "{\"v\":1,\"type\":\"error\",\"code\":\"invalid_json\"}"
+      },
+      {
+        "name": "forbidden",
+        "chunks": [
+          "HTTP/1.1 403 Forbidden\r\nContent-Type: application/json\r\nContent-Length: 48\r\nConnection: close\r\n\r\n{\"v\":1,\"type\":\"error\",\"code\":\"session_mismatch\"}"
+        ],
+        "status": 403,
+        "body": "{\"v\":1,\"type\":\"error\",\"code\":\"session_mismatch\"}"
+      },
+      {
+        "name": "conflict",
+        "chunks": [
+          "HTTP/1.1 409 Conflict\r\nContent-Type: application/json\r\nContent-Length: 42\r\nConnection: close\r\n\r\n{\"v\":1,\"type\":\"error\",\"code\":\"not_active\"}"
+        ],
+        "status": 409,
+        "body": "{\"v\":1,\"type\":\"error\",\"code\":\"not_active\"}"
+      }
+    ],
+    "invalid": [
+      {
+        "name": "another phrase",
+        "chunks": [
+          "HTTP/1.1 200 Fine\r\nContent-Type: application/json\r\nContent-Length: 98\r\nConnection: close\r\n\r\n{\"v\":1,\"type\":\"rejected\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c2\",\"code\":\"busy\"}"
+        ],
+        "code": "response_malformed"
+      },
+      {
+        "name": "another status",
+        "chunks": [
+          "HTTP/1.1 201 OK\r\nContent-Type: application/json\r\nContent-Length: 98\r\nConnection: close\r\n\r\n{\"v\":1,\"type\":\"rejected\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c2\",\"code\":\"busy\"}"
+        ],
+        "code": "response_malformed"
+      },
+      {
+        "name": "HTTP/1.0",
+        "chunks": [
+          "HTTP/1.0 200 OK\r\nContent-Type: application/json\r\nContent-Length: 98\r\nConnection: close\r\n\r\n{\"v\":1,\"type\":\"rejected\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c2\",\"code\":\"busy\"}"
+        ],
+        "code": "response_malformed"
+      },
+      {
+        "name": "an extra field",
+        "chunks": [
+          "HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nContent-Length: 98\r\nConnection: close\r\nX-A: b\r\n\r\n{\"v\":1,\"type\":\"rejected\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c2\",\"code\":\"busy\"}"
+        ],
+        "code": "response_malformed"
+      },
+      {
+        "name": "reordered fields",
+        "chunks": [
+          "HTTP/1.1 200 OK\r\nContent-Length: 98\r\nContent-Type: application/json\r\nConnection: close\r\n\r\n{\"v\":1,\"type\":\"rejected\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c2\",\"code\":\"busy\"}"
+        ],
+        "code": "response_malformed"
+      },
+      {
+        "name": "a leading zero length",
+        "chunks": [
+          "HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nContent-Length: 098\r\nConnection: close\r\n\r\n{\"v\":1,\"type\":\"rejected\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c2\",\"code\":\"busy\"}"
+        ],
+        "code": "response_malformed"
+      },
+      {
+        "name": "a body above 65536 bytes",
+        "chunks": [
+          "HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nContent-Length: 65537\r\nConnection: close\r\n\r\n"
+        ],
+        "code": "response_too_large"
+      },
+      {
+        "name": "a head without its end",
+        "chunks": [
+          "HTTP/1.1 200 OK\r\nX: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+        ],
+        "code": "response_malformed"
+      },
+      {
+        "name": "a truncated head",
+        "chunks": [
+          "HTTP/1.1 200 OK\r\n"
+        ],
+        "code": "response_truncated"
+      },
+      {
+        "name": "a truncated body",
+        "chunks": [
+          "HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nContent-Length: 98\r\nConnection: close\r\n\r\n{\"v\":1,\"type\":\"rejected\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c2\",\"code\":\"busy\""
+        ],
+        "code": "response_truncated"
+      },
+      {
+        "name": "trailing bytes",
+        "chunks": [
+          "HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nContent-Length: 98\r\nConnection: close\r\n\r\n{\"v\":1,\"type\":\"rejected\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c2\",\"code\":\"busy\"}H"
+        ],
+        "code": "response_trailing"
+      },
+      {
+        "name": "trailing bytes in a later chunk",
+        "chunks": [
+          "HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nContent-Length: 98\r\nConnection: close\r\n\r\n{\"v\":1,\"type\":\"rejected\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c2\",\"code\":\"busy\"}",
+          "HTTP/1.1 200 OK"
+        ],
+        "code": "response_trailing"
+      },
+      {
+        "name": "a status that does not fit its body",
+        "chunks": [
+          "HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nContent-Length: 44\r\nConnection: close\r\n\r\n{\"v\":1,\"type\":\"error\",\"code\":\"invalid_json\"}"
+        ],
+        "code": "response_status_mismatch"
+      },
+      {
+        "name": "a body the codec refuses",
+        "chunks": [
+          "HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nContent-Length: 150\r\nConnection: close\r\n\r\n{\"v\":1,\"type\":\"submit\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c1\",\"handler\":\"fixture\",\"operation\":\"fixture-v1\",\"artifact\":\"fixture-a\"}"
+        ],
+        "code": "wrong_direction"
+      },
+      {
+        "name": "a UTF-8 BOM before the head",
+        "chunks": [
+          "﻿HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nContent-Length: 98\r\nConnection: close\r\n\r\n{\"v\":1,\"type\":\"rejected\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c2\",\"code\":\"busy\"}"
+        ],
+        "code": "response_malformed"
+      },
+      {
+        "name": "a UTF-8 BOM before the body",
+        "chunks": [
+          "HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nContent-Length: 101\r\nConnection: close\r\n\r\n﻿{\"v\":1,\"type\":\"rejected\",\"session\":\"0123456789abcdef0123456789abcdef\",\"client\":\"c2\",\"code\":\"busy\"}"
+        ],
+        "code": "invalid_json"
+      }
+    ]
+  }
+}

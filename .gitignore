@@ -1,0 +1,8 @@
+.idea/
+.pi/
+__pycache__/
+resume.sh
+/target/
+/guest/node_modules/
+/guest/dist/
+/build/

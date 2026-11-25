@@ -1,0 +1,9 @@
+{"schema": "agentbox.handler-manifest.v1",
+ "id": "memo",
+ "version": "1",
+ "entry": "memo/host/worker.py",
+ "files": ["memo/host/worker.py", "lib/agentbox_handler.py"],
+ "operations": ["note"],
+ "metering": "none",
+ "limits": {"args_bytes": 512, "metadata_bytes": 512, "acquisition_seconds": 60},
+ "jail": {"entry": "acquisitions/memo/jail/memo.py", "shims": ["memo"]}}

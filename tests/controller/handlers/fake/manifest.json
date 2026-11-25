@@ -1,0 +1,8 @@
+{"schema": "agentbox.handler-manifest.v1",
+ "id": "fake",
+ "version": "1",
+ "entry": "fake/host/worker.py",
+ "files": ["fake/host/worker.py", "lib/agentbox_handler.py"],
+ "operations": ["fetch", "denied-op"],
+ "metering": "http",
+ "limits": {"args_bytes": 512, "metadata_bytes": 512, "acquisition_seconds": 30}}

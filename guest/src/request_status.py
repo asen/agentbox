@@ -1,0 +1,10 @@
+"""Closed request client status values."""
+
+EXIT_OK = 0
+EXIT_PROTOCOL = 1
+EXIT_INPUT_LOST = 2
+EXIT_RUNTIME = 3
+CLIENT_OK = 0
+CLIENT_REFUSED = 1
+CLIENT_USAGE = 2
+CLIENT_UNAVAILABLE = 3

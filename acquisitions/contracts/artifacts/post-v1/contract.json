@@ -1,0 +1,185 @@
+{
+  "description": "The artifact request POST wire contract v1: framing, bodies and codes over every registered handler (acquisitions/contracts/handlers/v1). Codecs only. See README.md.",
+  "version": 1,
+  "http": {
+    "method": "POST",
+    "path": "/agentbox/v1/request",
+    "version": "HTTP/1.1",
+    "host": "agentbox",
+    "content_type": "application/json",
+    "connection": "close",
+    "request_fields": [
+      "host",
+      "content-type",
+      "content-length",
+      "connection"
+    ],
+    "max_head_bytes": 8192,
+    "max_request_line_bytes": 1024,
+    "max_header_fields": 32,
+    "max_body_bytes": 65536,
+    "max_response_head_bytes": 1024,
+    "response_statuses": {
+      "200": "OK",
+      "400": "Bad Request",
+      "403": "Forbidden",
+      "409": "Conflict"
+    }
+  },
+  "body": {
+    "max_bytes": 65536,
+    "max_depth": 16,
+    "session_hex_digits": 32,
+    "max_ready_overhead_bytes": 2048,
+    "request_types": [
+      "submit",
+      "cancel",
+      "result"
+    ],
+    "response_types": [
+      "ready",
+      "rejected",
+      "closed",
+      "error"
+    ],
+    "handler_pattern": "[a-z][a-z0-9-]{0,31}",
+    "operation_pattern": "[a-z][a-z0-9-]{0,31}",
+    "key_pattern": "[A-Za-z0-9_.:@/+-]{1,128}",
+    "code_pattern": "[a-z][a-z0-9_]{0,63}",
+    "numbers": "non-negative safe integers only",
+    "canonical_objects": "args and metadata: keys sorted at every depth, compact",
+    "submit": {
+      "fields": [
+        "session",
+        "client",
+        "handler",
+        "operation",
+        "args"
+      ]
+    },
+    "request_sha256": "sha256 of {\"client\":C,\"handler\":H,\"operation\":O,\"args\":A}",
+    "cancel": {
+      "fields": [
+        "session",
+        "client"
+      ]
+    },
+    "result": {
+      "fields": [
+        "session",
+        "client",
+        "request",
+        "request_sha256",
+        "sha256",
+        "status"
+      ],
+      "statuses": [
+        "applied",
+        "failed"
+      ]
+    },
+    "ready": {
+      "fields": [
+        "session",
+        "client",
+        "request",
+        "request_sha256",
+        "handler",
+        "operation",
+        "size",
+        "sha256",
+        "metadata"
+      ]
+    },
+    "rejected": {
+      "fields": [
+        "session",
+        "client",
+        "code"
+      ],
+      "codes": [
+        "busy",
+        "submission_limit"
+      ]
+    },
+    "closed": {
+      "fields": [
+        "session",
+        "client",
+        "request",
+        "request_sha256",
+        "handler",
+        "outcome"
+      ],
+      "optional": [
+        "reason"
+      ],
+      "outcomes": [
+        "denied",
+        "cancelled",
+        "expired",
+        "recorded"
+      ],
+      "reason": "exactly for denied",
+      "lane_reasons": [
+        "handler_unknown",
+        "operation_unknown",
+        "operation_denied",
+        "args_too_large",
+        "byte_limit",
+        "delivery_stale",
+        "lost"
+      ],
+      "host_reasons": [
+        "handler_request_invalid",
+        "handler_binding_foreign",
+        "acquisition_cancelled",
+        "execution_stopped",
+        "acquisition_expired",
+        "staging_unsafe",
+        "staging_failed",
+        "worker_failed",
+        "artifact_invalid",
+        "upload_refused",
+        "upload_failed",
+        "tool_failed",
+        "acquisition_busy",
+        "acquisition_retained",
+        "cleanup_unconfirmed"
+      ],
+      "worker_reasons": "any code of the pattern, attributed to the handler"
+    },
+    "error": {
+      "fields": [
+        "code"
+      ],
+      "lane_codes": {
+        "session_mismatch": 403,
+        "not_active": 409,
+        "binding_mismatch": 409
+      },
+      "codec_status": 400
+    }
+  },
+  "framing_codes": {
+    "request_malformed": 400,
+    "request_framing_invalid": 400,
+    "request_header_invalid": 400,
+    "request_target_invalid": 400,
+    "request_body_overrun": 400,
+    "method_not_allowed": 405,
+    "post_unconfigured": 405,
+    "request_timeout": 408,
+    "request_body_too_large": 413,
+    "request_line_too_long": 414,
+    "request_head_too_large": 431,
+    "request_headers_too_many": 431
+  },
+  "response_reader_codes": [
+    "response_malformed",
+    "response_too_large",
+    "response_truncated",
+    "response_trailing",
+    "response_status_mismatch"
+  ]
+}

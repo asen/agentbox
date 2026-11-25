@@ -1,0 +1,11 @@
+{"schema": "agentbox.handler-manifest.v1",
+ "id": "git",
+ "version": "1",
+ "entry": "git/host/worker.py",
+ "files": ["git/host/worker.py", "lib/agentbox_handler.py"],
+ "operations": ["clone", "fetch"],
+ "metering": "none",
+ "tools": ["git"],
+ "limits": {"policy_bytes": 65536, "args_bytes": 1024, "metadata_bytes": 1024,
+            "acquisition_seconds": 600},
+ "jail": {"entry": "acquisitions/git/jail/git.py", "shims": ["git"]}}
